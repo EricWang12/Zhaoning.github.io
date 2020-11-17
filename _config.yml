@@ -1,3 +1,9 @@
 theme: jekyll-theme-minimal
 title: Zhaoning Wang
 description: Curious about the limit of human creations
+---
+layout: default
+title: UI Components
+nav_order: 2
+has_children: true
+---
