@@ -3,3 +3,19 @@ title: Zhaoning Wang
 description: Curious about the limit of human creations
 logo : https://user-images.githubusercontent.com/22462126/99374359-1cdf6d80-2888-11eb-849e-48c13f50be39.jpg
 show_downloads: false
+
+main:
+  - title: "Quick-Start Guide"
+    url: /docs/quick-start-guide/
+  - title: "Posts"
+    url: /year-archive/
+  - title: "Categories"
+    url: /categories/
+  - title: "Tags"
+    url: /tags/
+  - title: "Pages"
+    url: /page-archive/
+  - title: "Collections"
+    url: /collection-archive/
+  - title: "External Link"
+    url: https://google.com
