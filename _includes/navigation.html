@@ -1,40 +1,26 @@
-<!-- Belongs at: /_includes/navigation.html -->
+{% assign navigation = site.data.navigation[include.nav] %}
 
-<!-- This finds the current page so it can be highlighted. -->
-
-{% for entry in site.data.navigation %}
-{% capture fullurl %}{{ site.baseurl }}{{ entry.url }}{% endcapture %}
-    {% if fullurl == page.url %}
-        {% assign current_page = fullurl %}
-        {% break %}
-    {% elsif page.url contains fullurl %}
-        {% assign current_page = fullurl %}
-    {% endif %}
-{% endfor %}
-
-<!-- Then we build the nav bar. -->
-<nav>
-    <ul>
-    {% for entry in site.data.navigation %}
-        {% if entry.url == current_page %}
-            {% assign current = ' class="current"' %}
+<nav class="nav__list">
+  {% if page.sidebar.title %}<h3 class="nav__title" style="padding-left: 0;">{{ page.sidebar.title }}</h3>{% endif %}
+  <input id="ac-toc" name="accordion-toc" type="checkbox" />
+  <label for="ac-toc">{{ site.data.ui-text[site.locale].menu_label | default: "Toggle Menu" }}</label>
+  <ul class="nav__items">
+    {% for nav in navigation %}
+      <li>
+        {% if nav.url %}
+          <a href="{{ nav.url | relative_url }}"><span class="nav__sub-title">{{ nav.title }}</span></a>
         {% else %}
-            <!-- We have to declare it 'null' to ensure it doesn't propagate. -->
-            {% assign current = null %}
+          <span class="nav__sub-title">{{ nav.title }}</span>
         {% endif %}
-        {% assign sublinks = entry.sublinks %}
-        {% if sublinks %}
-        <li{{ current }}>
-            <a href="{{ site.baseurl }}{{ entry.url }}">{{ entry.title }}</a>
-            <ul>
-                {% for sublink in sublinks %}
-                <li><a href="{{ site.baseurl }}{{ sublink.url }}">{{ sublink.title }}</a></li>
-                {% endfor %}
-            </ul>
-        </li>
-        {% else %}
-        <li{{ current }}><a href="{{ site.baseurl }}{{ entry.url }}">{{ entry.title }}</a></li>
+
+        {% if nav.children != null %}
+        <ul>
+          {% for child in nav.children %}
+            <li><a href="{{ child.url | relative_url }}"{% if child.url == page.url %} class="active"{% endif %}>{{ child.title }}</a></li>
+          {% endfor %}
+        </ul>
         {% endif %}
+      </li>
     {% endfor %}
-    </ul>
+  </ul>
 </nav>
