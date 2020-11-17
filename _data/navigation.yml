@@ -1,6 +1,7 @@
-- title: Home
-  url: /
+main:
+  - title: Home
+    url: /
 
-- title: Group of Things
-  url: /group/
+  - title: Group of Things
+    url: /group/
 
