@@ -30,7 +30,7 @@ linkedin_username: zhaoning-eric-wang
 theme: minima
 plugins:
   - jekyll-feed
-
+  - jemoji
 
 defaults:
   -
