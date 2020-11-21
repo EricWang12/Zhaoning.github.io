@@ -41,10 +41,10 @@
       {% if post.categories contains page.category %}
         <li>
           {%- if post.image -%}
-            <img src="{{- post.image | relative_url -}}" alt="" class="blog-roll-image" style="float: right;" height = 80px>
+            <img src="{{- post.image | relative_url -}}" alt="" class="blog-roll-image" style="float: left;  width: 115px;height: 80px;object-fit: cover;" >
           {%- else -%}
             {%- assign postImage = "/assets/images/image-default.jpg" -%}
-            <img src="{{- postImage | relative_url -}}" alt="" class="blog-roll-image" style="float: left;" height = 80px> 
+            <img src="{{- postImage | relative_url -}}" alt="" class="blog-roll-image" style="float: left;  width: 115px;height: 80px;object-fit: cover;" > 
           {%- endif -%}
 
           <div style = "padding: 5px ;display:inline-block; margin-left: 20px; ">
