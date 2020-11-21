@@ -38,14 +38,29 @@
 <h2 class="post-list-heading"></h2>
   <ul class="post-list">
     {% for post in site.posts %}
-    {% if post.categories contains page.category %}
-    <li><span class="post-meta">{{project.date}}</span>
-    <h3>
-      <a class="post-link" href= "{{post.url}}">
-        {{post.title}}
-      </a>
-    </h3></li>
-    {% endif %}
+      {% if post.categories contains page.category %}
+        <li>
+          {%- if post.image -%}
+            <img src="{{- post.image | relative_url -}}" alt="" class="blog-roll-image" style="float: right;" height = 80px>
+          {%- else -%}
+            {%- assign postImage = "/assets/images/image-default.jpg" -%}
+            <img src="{{- postImage | relative_url -}}" alt="" class="blog-roll-image" style="float: left;" height = 80px> 
+          {%- endif -%}
+
+          <div style = "padding: 5px ;display:inline-block; margin-left: 20px; ">
+            {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+            <span class="post-meta">{{ post.date | date: date_format }}</span>
+            <h3>
+              <a class="post-link" href="{{ post.url | relative_url }}">
+                {{ post.title | escape }}
+              </a>
+            </h3>
+            {%- if site.show_excerpts -%}
+              {{ post.excerpt }}
+            {%- endif -%}
+          </div>
+        </li>
+      {% endif %}
     {% endfor %}
   </ul>
 
