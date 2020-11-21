@@ -23,7 +23,7 @@ email: zhaoning.eric.wang@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   A space for thoughts, fun ideas and curiosities
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "www.zhaoningwang.com" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://www.zhaoningwang.com" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  EricWang12
 linkedin_username: zhaoning-eric-wang
 # Build settings
