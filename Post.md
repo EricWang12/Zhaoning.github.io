@@ -1,6 +1,6 @@
 ---
 layout: postpage
 title: Posts
-category: misc
+category: post
 permalink: /Posts/
 ---

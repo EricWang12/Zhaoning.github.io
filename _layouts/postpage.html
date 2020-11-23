@@ -41,7 +41,8 @@
       {% if post.categories contains page.category %}
         <li>
           {%- if post.image -%}
-            <img src="{{- post.image | relative_url -}}" alt="" class="blog-roll-image" style="float: left;  width: 115px;height: 80px;object-fit: cover;" >
+          {%- assign postImage = "/assets/images/" | append: post.image -%}
+            <img src="{{- postImage | relative_url -}}" alt="" class="blog-roll-image" style="float: left;  width: 115px;height: 80px;object-fit: cover;" >
           {%- else -%}
             {%- assign postImage = "/assets/images/image-default.jpg" -%}
             <img src="{{- postImage | relative_url -}}" alt="" class="blog-roll-image" style="float: left;  width: 115px;height: 80px;object-fit: cover;" > 
@@ -55,10 +56,9 @@
                 {{ post.title | escape }}
               </a>
             </h3>
-            {%- if site.show_excerpts -%}
-              {{ post.excerpt }}
-            {%- endif -%}
           </div>
+          <br>{{ post.excerpt }}
+
         </li>
       {% endif %}
     {% endfor %}
