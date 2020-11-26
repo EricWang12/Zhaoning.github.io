@@ -41,13 +41,14 @@
       {% if post.categories contains page.category %}
         <li>
           
-          {%- assign postImage = "/assets/images/" | append: post.title | append: "/preview.jpg" -%}
-          {%- if {{postImage}} != nil -%}
-            <img src="{{- postImage | relative_url -}}" alt="" class="blog-roll-image" style="float: left;  width: 115px;height: 80px;object-fit: cover;" >
-          {%- else -%}
+                 
+          {% if post.image == "default" %}
             {%- assign postImage = "/assets/images/image-default.jpg" -%}
-            <img src="{{- postImage | relative_url -}}" alt="" class="blog-roll-image" style="float: left;  width: 115px;height: 80px;object-fit: cover;" > 
+          {%- else -%}
+            {%- assign postImage = "/assets/images/" | append: post.title | append: "/preview.jpg" -%}
+  
           {%- endif -%}
+            <img src="{{- postImage | relative_url -}}" alt="" class="blog-roll-image" style="float: left;  width: 115px;height: 80px;object-fit: cover;" >
 
           <div style = "padding: 5px ;display:inline-block; margin-left: 20px; ">
             {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}

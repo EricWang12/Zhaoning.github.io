@@ -3,7 +3,6 @@ layout: post
 title:  "Picture Low Polifier"
 categories: project
 excerpt: An app that uses image processing to transform pictures into triangular low-poly arts
-image: Picture-Low-Polifier.jpg
 ---
 
 ## Getting Started
