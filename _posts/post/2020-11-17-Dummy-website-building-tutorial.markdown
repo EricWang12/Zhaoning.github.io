@@ -40,7 +40,7 @@ and you are done!!! AWESOME!
 I used [Google domains](https://domains.google.com/) to get the my domain, as the interface is cleaner and it has better Search Engine Optimization. The tutorial would be based on Google domains, but You can use any domain register website you want.
 
 You go and search the url you want 
-![](:path\google-domains.png)
+![](\assets\images\Dummy Website Building Tutorial\google-domains.png)
 
 If it is not occupied, then awesome!! buy that and you will have your own domain name!!!
 
