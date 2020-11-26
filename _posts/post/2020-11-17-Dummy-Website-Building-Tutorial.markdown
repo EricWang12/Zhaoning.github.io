@@ -1,6 +1,6 @@
 ---
 layout: post
-# title:  Dummy website building tutorial
+title:  Dummy Website Building Tutorial
 categories: post
 excerpt: The ultimate dummy (programmer) guide to build a website"
 
