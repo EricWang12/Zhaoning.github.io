@@ -42,8 +42,7 @@
         <li>
           
           {%- assign postImage = "/assets/images/" | append: post.title | append: "/preview.jpg" -%}
-          {% capture fileExists %}{% file_exists {{postImage}} %}{% endcapture %}
-          {%- if fileExists=="true" -%}
+          {%- if {{postImage}} != nil -%}
             <img src="{{- postImage | relative_url -}}" alt="" class="blog-roll-image" style="float: left;  width: 115px;height: 80px;object-fit: cover;" >
           {%- else -%}
             {%- assign postImage = "/assets/images/image-default.jpg" -%}
