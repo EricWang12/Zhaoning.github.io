@@ -46,12 +46,12 @@
         <li>
           
                  
-          {% if post.image == "default" %}
+<!--           {% if post.image == "default" %}
             {%- assign postImage = "/assets/images/image-default.jpg" -%}
-          {%- else -%}
-            {%- assign postImage = "/assets/images/" | append: post.title | append: "/preview.jpg" -%}
+          {%- else -%} -->
+          {%- assign postImage = "/assets/images/" | append: post.title | append: "/preview.jpg" -%}
   
-          {%- endif -%}
+<!--           {%- endif -%} -->
             <img src="{{- postImage | relative_url -}}" alt="" class="blog-roll-image" style="float: left;  width: 115px;height: 80px;object-fit: cover;" >
 
           <div style = "padding: 5px ;display:inline-block; margin-left: 20px; ">
