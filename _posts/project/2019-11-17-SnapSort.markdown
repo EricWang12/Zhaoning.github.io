@@ -1,0 +1,7 @@
+---
+layout: post
+title:  "SnapSort"
+categories: project
+excerpt: app aims to help people recognize and recycle trash in an informative way with image capturing and cloud image recognition.
+custom_url: "https://devpost.com/software/snapsort"
+---
