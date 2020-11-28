@@ -6,19 +6,6 @@ excerpt: The ultimate dummy (programmer) guide to build a website"
 
 ---
 
-This tutorial assumes you know a little about:
-
-*  Terminal/Command line
-
-Optional:
-
-*  html (real easy thing to learn)
-*  GitHUb (also nothing hard)
-
-
-and you will be ready!
-
-but if you don't that is totally okay! you can still make amazing websites.
 
 Three versions are included in the post:
 
@@ -100,6 +87,21 @@ Or you can read the cheatsheet above...
 TO BE UPDATED
 
 # Long Term sustainable
+
+This part assumes you know a little about:
+
+*  Terminal/Command line
+
+Optional:
+
+*  html (real easy thing to learn)
+*  GitHUb (also nothing hard)
+
+
+and you will be ready!
+
+but if you don't that is totally okay! you can still make amazing websites.
+
 
 ### Steps
 
