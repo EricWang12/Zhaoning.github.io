@@ -2,11 +2,26 @@
 ---
 <!DOCTYPE html>
 <html lang="{{ page.lang | default: site.lang | default: "en" }}">
-
-  {% include head.html %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+    <meta  property="fb:app_id"  content="2467003636934744"  />
+    <meta  property="fb:admins"  content="2467003636934744"/>
+    <meta  property="og:url"  content="URL"  />
+    <meta  property="og:title"  content="TITLE"  />
+    <meta  property="og:description"  content="DESC"  />
+    <meta  property="og:image"  content="IMG"  />
+    
+  <!-- End Jekyll SEO tag -->
+  </head>
+  <!-- {% include head.html %} -->
 
   <body>
-
+    
+    <div id="fb-root"></div>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v9.0&appId=2467003636934744&autoLogAppEvents=1" nonce="UN0p3n1C"></script>
+    
     {% include header.html %}
 
     <main class="page-content" aria-label="Content">
@@ -15,8 +30,13 @@
       </div>
     </main>
 
-    {% include footer.html %}
+    {% include facebook-like.html %}
 
+    <hr/>
+    <h4>Comments</h4>
+    <div class="fb-comments" data-href="https://www.zhaoningwang.com/{{ page.url }}" data-colorscheme="dark" data-num-posts="4" data-width="706"></div>
+
+    {% include footer.html %}
   </body>
 
 </html>

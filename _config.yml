@@ -46,12 +46,13 @@ defaults:
       layout: "post"
       permalink: /:categories/:title
 
-comments:
-  provider : "facebook"
-  facebook:
-    appid : 2467003636934744
-    num_posts : 5 # 5 (default)
-    colorscheme : "light" # "light" (default), "dark"
+# comments:
+#   provider : "facebook"
+#   facebook:
+#     appid : 2467003636934744
+#     num_posts : 5 # 5 (default)
+#     colorscheme : "light" # "light" (default), "dark"
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
