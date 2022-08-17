@@ -9,7 +9,7 @@ heading: Zhaoning Wang
 
 # About me
 
-I am currently working with Prof. Sharon Li in Deep Learning group in UW-Madison
+I am currently an incoming student at MSCV in UCF
 
 # Research Interest
 
