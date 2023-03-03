@@ -57,15 +57,27 @@
 
 
   <style>
-    .right{width:58%; height:300px; position:relative;}
-    .left{width:40%; height:300px; position:relative;}
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .right{    flex: 1 0 auto;    flex-basis:58%; height:300px; position:relative;}
+    .left{    flex: 1 0 auto;flex-basis:40%; height:300px; position:relative;}
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .right {
+        margin-top: 10px;
+      }
+    }
     </style>
+    <div class="container">
+    <div class="left" style="float: left;">{% capture my_include %}{% include_relative me-left.md %}{% endcapture %}
+        {{ my_include | markdownify }}<br></div>
     <div class="right" style="float: right;">{% capture my_include %}{% include_relative me-right.md %}{% endcapture %}
     {{ my_include | markdownify }}</div>
-    <div class="left" style="float: left;">{% capture my_include %}{% include_relative me-left.md %}{% endcapture %}
-        {{ my_include | markdownify }}<br>
-    
-    </div>
+  </div>
     <div class="post-content" >
         {{content}}
     <style>
