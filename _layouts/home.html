@@ -67,14 +67,11 @@
       .container {
         flex-direction: column;
       }
-      .right {
-        margin-top: 10px;
-      }
     }
     </style>
     <div class="container">
-    <div class="left" style="float: left;">{% capture my_include %}{% include_relative me-left.md %}{% endcapture %}
-        {{ my_include | markdownify }}<br></div>
+      <div class="left" style="float: left;">{% capture my_include %}{% include_relative me-left.md %}{% endcapture %}
+          {{ my_include | markdownify }}<br></div>
     <div class="right" style="float: right;">{% capture my_include %}{% include_relative me-right.md %}{% endcapture %}
     {{ my_include | markdownify }}</div>
   </div>
