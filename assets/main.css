@@ -1,0 +1,62 @@
+
+.pubitem {
+    margin: 2em 0;
+    line-height: 1em;
+}
+
+.pubtitle {
+font-size: 125%;
+margin-bottom: .5em;
+line-height: 1.2em;
+font-weight: bold;
+}
+
+.pubauthors, .pubinfo {
+font-size: 90%;
+margin-bottom: .5em;
+text-decoration: none;
+}
+
+.pubteaser {
+clear: both;
+}
+
+.pubteaser a {
+float: left;
+margin-right: 2em;
+}
+
+.pubteaser img {
+width: 110px;
+border: 1px solid black;
+}
+
+.publinks {
+font-size: 90%;
+}
+
+.publication-authors {
+margin: 0.5rem 0;
+}
+
+.publication-info {
+margin: 0.5rem 0;
+}
+
+.publication-teaser {
+margin: 2em;
+}
+
+.publication-teaser img {
+border: none;
+}
+a {
+color:#0077bc;
+text-decoration: none;
+}
+
+a:hover {
+color:#A31F34; 
+text-decoration:none; 
+cursor:pointer;  
+}

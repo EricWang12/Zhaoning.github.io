@@ -4,5 +4,3 @@ title: "Projects"
 category: "project"
 permalink: /Projects/
 ---
-
-LOLOL

@@ -27,7 +27,8 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://www.zhaoningwang.com" # the base hostname & protocol for your site, e.g. http://example.com
 social:
   github: EricWang12
-  linkedin: zhaoning-eric-wang
+  twitter: Zhaoning_Eric_W
+  # linkedin: zhaoning-eric-wang
 # Build settings
 theme: minima
 plugins:
@@ -45,7 +46,10 @@ defaults:
     values:
       layout: "post"
       permalink: /:categories/:title
-
+collections:
+  publications:
+    output: true
+    permalink: /:collection/:name
 # comments:
 #   provider : "facebook"
 #   facebook:

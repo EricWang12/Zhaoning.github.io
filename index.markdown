@@ -7,12 +7,19 @@ title: "About"
 heading: Zhaoning Wang
 ---
 
-(This page may not been update for a while...)
 
-# About me
 
-I am currently an incoming student at MSCV in UCF
+# <span style="color:#A31F34"><b>Research Interest</b></span>
 
-# Research Interest
+I am interested in using state-of-the-art deep learning and computer vision to improve machine perceptions and let them aware of their surroundings. 
 
-I am interested in using state-of-the-art deep learning and computer vision to improve machine perceptions and let them aware of their surroundings. I am also interested in Augmented Reality, robotics and self-driving. 
+I am particularly interested in **3D reconstructions**, **Scene Understanding** and **human-related computer vision**. I am also keen on **data-driven computer vision** or **synthetic data**. I believe these will help boost the technology of Augmented Reality, robotics and self-driving algorithms.
+
+
+
+I'm always open to research collaborations in this area. Feel free to drop me an email at : 
+
+<p style=" text-align: center;">zhaoning [<span style="color:#A31F34">dot</span>] eric [<span style="color:#A31F34">dot</span>] wang [<span style="color:#A31F34">at</span>] gmail [<span style="color:#A31F34">dot</span>] com.</p>
+
+
+# <span style="color:#A31F34"><b>Publications</b></span>

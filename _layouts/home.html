@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
-<title>About | Zhaoning Wang</title>
+<title>Zhaoning Wang</title>
 <meta name="generator" content="Jekyll v4.1.1" />
 <meta property="og:title" content="About" />
 <meta property="og:locale" content="en_US" />
@@ -17,8 +17,21 @@
 <script type="application/ld+json">
 {"@type":"WebSite","url":"http://localhost:4000/","headline":"About","description":"A space for thoughts, fun ideas and curiosities","name":"Zhaoning Wang","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Zhaoning Wang" /></head>
-<body><header class="site-header" role="banner">
+<link rel="stylesheet" href="assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Zhaoning Wang" />
+<script>
+  window.onload = function() {
+    var divs = document.getElementsByClassName("publinks");
+    for (var i = 0; i < divs.length; i++) {
+      var elements = divs[i].querySelectorAll("[href='']");
+      for (var j = 0; j < elements.length; j++) {
+        elements[j].style.display = "none";
+      }
+    }
+  };
+</script>
+</head>
+<body>
+  <!-- <header class="site-header" role="banner">
 
   <div class="wrapper"><a class="site-title" rel="author" href="/">Zhaoning Wang</a><nav class="site-nav">
         <input type="checkbox" id="nav-trigger" class="nav-trigger" />
@@ -32,7 +45,7 @@
 
         <div class="trigger"><a class="page-link" href="/Posts/">Posts</a><a class="page-link" href="/Projects/">Projects</a><a class="page-link" href="/">About</a></div>
       </nav></div>
-</header>
+</header> -->
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
         <article class="post">
@@ -44,7 +57,8 @@
 
 
   <style>
-    .right,.left{width:50%; height:350px; position:relative;}
+    .right{width:58%; height:300px; position:relative;}
+    .left{width:40%; height:300px; position:relative;}
     </style>
     <div class="right" style="float: right;">{% capture my_include %}{% include_relative me-right.md %}{% endcapture %}
     {{ my_include | markdownify }}</div>
@@ -54,8 +68,104 @@
     </div>
     <div class="post-content" >
         {{content}}
-    </div>
+    <style>
+      
+/* add additional CSS rules below */
 
+.pubitem {
+  margin: 2em 0;
+  line-height: 1em;
+}
+
+.pubtitle {
+  font-size: 125%;
+  margin-bottom: .5em;
+  line-height: 1.2em;
+  font-weight: bold;
+}
+
+.pubauthors, .pubinfo {
+  font-size: 90%;
+  margin-bottom: .5em;
+  text-decoration: none;
+}
+
+.pubteaser {
+  clear: both;
+}
+
+.pubteaser a {
+  float: left;
+  margin-right: 1em;
+}
+
+.pubteaser img {
+  height: 125px;
+  width: 185px;
+
+  border: 1px solid black;
+}
+
+.publinks {
+  font-size: 90%;
+}
+
+.publication-authors {
+  margin: 0.5rem 0;
+}
+
+.publication-info {
+  margin: 0.5rem 0;
+}
+
+.publication-teaser {
+  margin: 2em;
+}
+
+.publication-teaser img {
+  border: none;
+}
+a {
+  color:#0077bc;
+  text-decoration: none;
+}
+
+a:hover {
+  color:#A31F34; 
+  text-decoration:none; 
+  cursor:pointer;  
+}
+    </style>
+    {% assign publications = site.publications | sort: "year" | reverse %}
+    {% for pub in publications %}
+    <div class="pubitem">
+
+      <div class="pubteaser">
+        <a href="{{pub.url}}">
+          <img src="assets/images/publications/{{ pub.slug }}.png"/>
+        </a>
+   
+      </div>
+      <div class="pubtitle">
+        {{ pub.title }}
+      </div>
+      <div class="pubauthors">
+        {{ pub.authors }}
+      </div>
+      <div class="pubinfo">
+        {{ pub.publication }}, {{ pub.year}}
+      </div>
+      <div  class="publinks">
+        <a href="{{pub.pdf}}"><i class="far fa-file-pdf"></i>  &nbsp; <b>PDF</b> &nbsp;</a>
+        <a href="{{pub.link}}"><i class="fas fa-arrow-right"></i> &nbsp; <b>Project Page</b> &nbsp;</a>
+        <a href="{{pub.code}}"><i class="fas fa-arrow-right"></i> &nbsp; <b>Code</b> &nbsp; </a>
+      </div>
+    </div>
+    <hr>
+    {% endfor %}
+  </div>
+     <!-- <h1 class="mt-4">Publications</h1> -->
+  <!-- <script type='text/javascript' id='clustrmaps' src='//cdn.clustrmaps.com/map_v2.js?cl=ffffff&w=a&t=n&d=IG3Y3SE8mEXIE1TN2kK8VxR_NGP5NuEFWY6txLQVcWo'></script> -->
 </article>
 
       </div>
