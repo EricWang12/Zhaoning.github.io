@@ -42,9 +42,9 @@ defaults:
   -
     scope:
       path: ""
-      type: "post"
+      type: "posts"
     values:
-      layout: "post"
+      layout: "posts"
       permalink: /:categories/:title
 collections:
   publications:
