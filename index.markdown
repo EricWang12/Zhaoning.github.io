@@ -13,7 +13,7 @@ heading: Zhaoning Wang
 
 I am interested in using state-of-the-art deep learning and computer vision to improve machine perceptions and let them aware of their surroundings. 
 
-I am particularly interested in **3D reconstructions**, **Scene Understanding** and **human-related computer vision**. I am also keen on **data-driven computer vision** or **synthetic data**. I believe these will help boost the technology of Augmented Reality, robotics and self-driving algorithms.
+I am particularly interested in **3D reconstructions**, **Generative Networks** and **human-related computer vision**. I am also keen on **data-driven computer vision** or **synthetic data**. I believe these will fundamentally help to bridge the gap between the virtual and physical world, i.e. Computers and Reality.
 
 
 
