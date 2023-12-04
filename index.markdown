@@ -7,13 +7,17 @@ title: "About"
 heading: Zhaoning Wang
 ---
 
+<p style="text-align: center;">⬆️ Try to drag around!! ⬆️</p>
+
+# <span style="color:#A31F34"><b>About me</b></span>
+I am Zhaoning Wang, a research master of computer vision (MSCV) at the Center of Research in Computer Vision ([CRCV](https://www.crcv.ucf.edu/)) of University of Central Florida (UCF). I am advised by Prof. [Chen Chen](https://www.crcv.ucf.edu/chenchen/). Before that, I was a visiting research scholar at Human Sensing Lab at Robotic Institute (RI) at CMU, where I am fortunate to work with prof.[Fernando De la Torre](https://www.cs.cmu.edu/~ftorre/). I obtained the Bachelor's degree of Computer Science and Computer Engineering at Unviersity of Wisconsin-Madison, advised by Prof. [Yixuan Sharon Li](https://pages.cs.wisc.edu/~sharonli/).
 
 
 # <span style="color:#A31F34"><b>Research Interest</b></span>
 
 I am interested in using state-of-the-art deep learning and computer vision to improve machine perceptions and let them aware of their surroundings. 
 
-I am particularly interested in **3D reconstructions**, **Generative Networks** and **human-related computer vision**. I am also keen on **data-driven computer vision** or **synthetic data**. I believe these will fundamentally help to bridge the gap between the virtual and physical world, i.e. Computers and Reality.
+I am particularly interested in **3D Nerual Representations**, **3D reconstructions**, **Generative Networks** and **human-related computer vision**. I am also keen on **data-driven computer vision** or **synthetic data**. I believe these will fundamentally help to bridge the gap between the virtual and physical world, i.e. Computers and Reality.
 
 
 
