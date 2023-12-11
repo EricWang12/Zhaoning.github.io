@@ -1,0 +1,4 @@
+[submodule "LucidDreaming"]
+	path = LucidDreaming
+	url = https://github.com/EricWang12/LucidDreaming
+	branch = page
