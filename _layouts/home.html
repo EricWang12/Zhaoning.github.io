@@ -76,6 +76,7 @@
     <div class="right" style="float: right;">{% capture my_include %}{% include_relative me-right.md %}{% endcapture %}
     {{ my_include | markdownify }}</div>
   </div>
+
     <div class="post-content" >
         {{content}}
     <style>
@@ -173,6 +174,35 @@ a:hover {
     </div>
     <hr>
     {% endfor %}
+    <h1 class="mt-4" style="color:#A31F34"><b>Projects</b></h1>
+    {% assign publications = site.projects | sort: "year" | reverse %}
+    {% for pub in publications %}
+    <div class="pubitem">
+
+      <div class="pubteaser">
+        <a href="{{pub.url}}">
+          <img src="assets/images/publications/{{ pub.slug }}.png"/>
+        </a>
+   
+      </div>
+      <div class="pubtitle">
+        {{ pub.title }}
+      </div>
+      <div class="pubauthors">
+        {{ pub.authors }}
+      </div>
+      <div class="pubinfo">
+        {{ pub.publication }}, {{ pub.year}}
+      </div>
+      <div  class="publinks">
+        <a href="{{pub.pdf}}"><i class="far fa-file-pdf"></i>  &nbsp; <b>PDF</b> &nbsp;</a>
+        <a href="{{pub.link}}"><i class="fas fa-arrow-right"></i> &nbsp; <b>Project Page</b> &nbsp;</a>
+        <a href="{{pub.code}}"><i class="fas fa-arrow-right"></i> &nbsp; <b>Code</b> &nbsp; </a>
+      </div>
+    </div>
+    <hr>
+    {% endfor %}
+
   </div>
      <!-- <h1 class="mt-4">Publications</h1> -->
   <!-- <script type='text/javascript' id='clustrmaps' src='//cdn.clustrmaps.com/map_v2.js?cl=ffffff&w=a&t=n&d=IG3Y3SE8mEXIE1TN2kK8VxR_NGP5NuEFWY6txLQVcWo'></script> -->

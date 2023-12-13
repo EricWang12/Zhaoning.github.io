@@ -8,4 +8,5 @@ publication: In submission
 year: 2024
 slides: true
 pdf: 'https://arxiv.org/abs/2312.00588'
+link: 'https://www.zhaoningwang.com/LucidDreaming'
 ---

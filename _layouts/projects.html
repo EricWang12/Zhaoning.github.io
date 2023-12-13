@@ -1,0 +1,14 @@
+---
+layout: default
+title: Projects
+---
+
+<h1 class="mt-4">Projects</h1>
+{% assign projects = site.projects | sort: "year" | reverse %}
+{% for pub in projects %}
+<div class="pubitem">
+  <div class="pubtitle">{{ pub.title }}</div>
+  <div class="pubauthors">{{ pub.authors }}</div>
+  <div class="pubinfo">{{ pub.publication }}, {{ pub.year}}</div>
+</div>
+{% endfor %}
