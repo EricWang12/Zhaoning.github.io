@@ -1,4 +1,4 @@
----
+<!-- ---
 layout: publications
 title: "Tri-plane Diffusion Models"
 # authors:    <a href="https://www.zhaoningwang.com"> <b>Zhaoning Wang</b></a> ,    
@@ -8,4 +8,4 @@ publication: Course Project
 year: 2023
 slides: true
 pdf: 'assets/docs/Tri-plane_Diffusion_Models.pdf'
----
+--- -->
