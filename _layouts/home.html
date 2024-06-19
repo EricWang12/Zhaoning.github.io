@@ -147,7 +147,7 @@ a:hover {
   cursor:pointer;  
 }
     </style>
-    {% assign publications = site.publications | sort: "year" | reverse %}
+    {% assign publications = site.publications | sort: "year" | reverse | sort: "month" | reverse %}
     {% for pub in publications %}
     <div class="pubitem">
 

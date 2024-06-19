@@ -4,7 +4,7 @@ title: Publications
 ---
 
 <h1 class="mt-4">Publications</h1>
-{% assign publications = site.publications | sort: "year" | reverse %}
+{% assign publications = site.publications | sort: "year" | reverse | sort: "month" | reverse %}
 {% for pub in publications %}
 <div class="pubitem">
   <div class="pubtitle">{{ pub.title }}</div>
