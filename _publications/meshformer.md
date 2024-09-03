@@ -17,7 +17,7 @@ publication: In submission
 year: 2024
 month: 5
 # slides: true
-# pdf: 'https://arxiv.org/abs/2404.07987'
-# link: 'https://liming-ai.github.io/ControlNet_Plus_Plus/'
+pdf: 'https://arxiv.org/pdf/2408.10198'
+link: 'https://meshformer3d.github.io/'
 # code: 'https://github.com/liming-ai/ControlNet_Plus_Plus'
 ---

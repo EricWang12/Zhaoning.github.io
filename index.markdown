@@ -12,12 +12,13 @@ heading: Zhaoning Wang
 
 # <span style="color:#A31F34"><b>About me</b></span>
 
-<b>news</b>
-I will be joining [Hao Su](https://cseweb.ucsd.edu/~haosu/)'s lab and  as a Research Assistant 
+<!-- <b>news</b> -->
+
+<!-- I will be joining [Hao Su](https://cseweb.ucsd.edu/~haosu/)'s lab and  as a Research Assistant  -->
 
 
-I am Zhaoning Wang, a research Master's student at the Center of Research in Computer Vision ([CRCV](https://www.crcv.ucf.edu/)) of University of Central Florida (UCF). I am advised by Prof. [Chen Chen](https://www.crcv.ucf.edu/chenchen/). Before that, I was a visiting research scholar at Human Sensing Lab at Robotic Institute (RI) at CMU, where I am fortunate to work with prof.[Fernando De la Torre](https://www.cs.cmu.edu/~ftorre/). I obtained the Bachelor's degree of Computer Science and Computer Engineering at Unviersity of Wisconsin-Madison, advised by Prof. [Yixuan Sharon Li](https://pages.cs.wisc.edu/~sharonli/).
-
+<!-- I am Zhaoning Wang, a research Master's student at the Center of Research in Computer Vision ([CRCV](https://www.crcv.ucf.edu/)) of University of Central Florida (UCF). I am advised by Prof. [Chen Chen](https://www.crcv.ucf.edu/chenchen/). Before that, I was a visiting research scholar at Human Sensing Lab at Robotic Institute (RI) at CMU, where I am fortunate to work with prof.[Fernando De la Torre](https://www.cs.cmu.edu/~ftorre/). I obtained the Bachelor's degree of Computer Science and Computer Engineering at Unviersity of Wisconsin-Madison, advised by Prof. [Yixuan Sharon Li](https://pages.cs.wisc.edu/~sharonli/). -->
+I am Zhaoning Wang, currently a Research Assistant at [Hillbot Inc.](https://www.hillbot.ai/) and Sulab with Prof. [Hao Su](https://cseweb.ucsd.edu/~haosu/). I obtained my Master's degree at the Center of Research in Computer Vision ([CRCV](https://www.crcv.ucf.edu/)) in University of Central Florida (UCF), advised by Prof. [Chen Chen](https://www.crcv.ucf.edu/chenchen/). Before that, I was a visiting research scholar at Human Sensing Lab at Robotic Institute (RI) at CMU, where I am fortunate to work with prof. [Fernando De la Torre](https://www.cs.cmu.edu/~ftorre/). I obtained the Bachelor's degree of Computer Science and Computer Engineering at University of Wisconsin-Madison.
 
 # <span style="color:#A31F34"><b>Research Interest</b></span>
 
