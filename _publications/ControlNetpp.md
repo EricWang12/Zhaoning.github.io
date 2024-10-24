@@ -8,7 +8,7 @@ authors:    Ming Li,
             <b>Zhaoning Wang</b>, 
             Xuefeng Xiao, 
             Chen Chen.
-publication: Arxiv
+publication: European Conference on Computer Vision (<b>ECCV</b>)
 year: 2024
 month: 3
 slides: true

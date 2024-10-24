@@ -13,9 +13,9 @@ authors:    Minghua Liu*,
             Isabella Liu, 
             Hongzhi Wu, 
             Hao Su.
-publication: In submission
+publication: Conference on Neural Information Processing Systems (<b>NeurIPS</b>) [<b>Oral</b>]
 year: 2024
-month: 5
+month: 8
 # slides: true
 pdf: 'https://arxiv.org/pdf/2408.10198'
 link: 'https://meshformer3d.github.io/'
