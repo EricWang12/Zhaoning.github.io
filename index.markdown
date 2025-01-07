@@ -24,7 +24,7 @@ I am Zhaoning Wang, currently a Research Assistant at [Hillbot Inc.](https://www
 
 I am interested in using state-of-the-art deep learning and computer vision to improve machine perceptions and let them aware of their surroundings. 
 
-I am particularly interested in **3D Nerual Representations**, **3D reconstructions**, **Generative Networks** and **human-related computer vision**. I am also keen on **data-driven computer vision** or **synthetic data**. I believe these will fundamentally help to bridge the gap between the virtual and physical world, i.e. Computers and Reality.
+I am particularly interested in **3D Neural Representations**, **3D reconstructions**, **Generative Networks** and **human-related computer vision**. I am also keen on **data-driven computer vision** or **synthetic data**. I believe these will fundamentally help to bridge the gap between the virtual and physical world, i.e. Computers and Reality.
 
 
 
