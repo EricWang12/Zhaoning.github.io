@@ -19,7 +19,11 @@ heading: Zhaoning Wang
 
 <!-- I am Zhaoning Wang, a research Master's student at the Center of Research in Computer Vision ([CRCV](https://www.crcv.ucf.edu/)) of University of Central Florida (UCF). I am advised by Prof. [Chen Chen](https://www.crcv.ucf.edu/chenchen/). Before that, I was a visiting research scholar at Human Sensing Lab at Robotic Institute (RI) at CMU, where I am fortunate to work with prof.[Fernando De la Torre](https://www.cs.cmu.edu/~ftorre/). I obtained the Bachelor's degree of Computer Science and Computer Engineering at Unviersity of Wisconsin-Madison, advised by Prof. [Yixuan Sharon Li](https://pages.cs.wisc.edu/~sharonli/). -->
 <!-- I am Zhaoning Wang, currently a Research Assistant at [Hillbot Inc.](https://www.hillbot.ai/) and Sulab with Prof. [Hao Su](https://cseweb.ucsd.edu/~haosu/). I obtained my Master's degree at the Center of Research in Computer Vision ([CRCV](https://www.crcv.ucf.edu/)) in University of Central Florida (UCF), advised by Prof. [Chen Chen](https://www.crcv.ucf.edu/chenchen/). Before that, I was a visiting research scholar at Human Sensing Lab at Robotic Institute (RI) at CMU, where I am fortunate to work with prof. [Fernando De la Torre](https://www.cs.cmu.edu/~ftorre/). I obtained the Bachelor's degree of Computer Science and Computer Engineering at University of Wisconsin-Madison. -->
-I am Zhaoning Wang, currently an incoming PhD student at University of Michigan, advised by Prof. [Jun Gao](https://www.cs.toronto.edu/~jungao/). 
+I am Zhaoning Wang, currently an incoming PhD student at University of Michigan, advised by Prof. [Jun Gao](https://www.cs.toronto.edu/~jungao/). Previously, I was fortunate to intern at [Hillbot Inc.](https://www.hillbot.ai/) and [Sulab](https://cseweb.ucsd.edu/~haosu/),  where I was mentored by Dr. [Minghua Liu](https://cseweb.ucsd.edu/~mil070/). 
+I also had amazing experience working with Prof. [Chen Chen](https://www.crcv.ucf.edu/chenchen/), [Fernando De la Torre](https://www.cs.cmu.edu/~ftorre/) and [Sharon Li](https://pages.cs.wisc.edu/~sharonli/).
+
+<br />
+
 <!-- # <span style="color:#A31F34"><b>Research Interest</b></span> -->
 
 I am interested in using state-of-the-art deep learning and computer vision to improve machine perceptions and let them aware of their surroundings. 
