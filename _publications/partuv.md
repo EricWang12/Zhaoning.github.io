@@ -1,6 +1,6 @@
 ---
 layout: publications
-title: "MeshFormer: High-Quality Mesh Generation with 3D-Guided Reconstruction Model"
+title: "PartUV: Part-Based UV Unwrapping of 3D Meshes"
 authors:    <b>Zhaoning Wang</b>,
             Xinyue Wei, 
             Ruoxi Shi, 
@@ -13,5 +13,5 @@ month: 9
 # slides: true
 pdf: ''
 link: 'https://www.zhaoningwang.com/partuv'
-# code: 'https://github.com/liming-ai/ControlNet_Plus_Plus'
+code: 'https://github.com/EricWang12/PartUV'
 ---
