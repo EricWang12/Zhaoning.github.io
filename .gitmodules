@@ -2,3 +2,7 @@
 	path = LucidDreaming
 	url = https://github.com/EricWang12/LucidDreaming
 	branch = page
+[submodule "PartUV"]
+	path = PartUV
+	url = https://github.com/EricWang12/PartUV.git
+	branch = page
