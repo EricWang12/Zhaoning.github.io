@@ -12,6 +12,6 @@ year: 2025
 month: 9
 # slides: true
 pdf: ''
-link: 'https://www.zhaoningwang.com/partuv'
+link: 'https://www.zhaoningwang.com/PartUV/'
 code: 'https://github.com/EricWang12/PartUV'
 ---
