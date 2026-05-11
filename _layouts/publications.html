@@ -3,12 +3,31 @@ layout: default
 title: Publications
 ---
 
-<h1 class="mt-4">Publications</h1>
-{% assign publications = site.publications | sort: "year" | reverse | sort: "month" | reverse %}
-{% for pub in publications %}
-<div class="pubitem">
-  <div class="pubtitle">{{ pub.title }}</div>
-  <div class="pubauthors">{{ pub.authors }}</div>
-  <div class="pubinfo">{{ pub.publication }}, {{ pub.year}}</div>
-</div>
-{% endfor %}
+<article class="post">
+  <header class="post-header">
+    <h1 class="post-title">Publications</h1>
+  </header>
+  <div class="post-content">
+    {% assign publications = site.publications | sort: "month" | sort: "year" | reverse %}
+    {% for pub in publications %}
+    <div class="pubitem">
+      <div class="pubteaser">
+        <a href="{% if pub.link != '' and pub.link %}{{ pub.link }}{% else %}{{ pub.url }}{% endif %}">
+          <img src="{{ '/assets/images/publications/' | relative_url }}{{ pub.slug }}.png" alt="{{ pub.title }}"/>
+        </a>
+      </div>
+      <div class="pubdetails">
+        <div class="pubtitle">{{ pub.title }}</div>
+        <div class="pubauthors">{{ pub.authors }}</div>
+        <div class="pubinfo">{{ pub.publication }}, {{ pub.year }}</div>
+        <div class="publinks">
+          {% if pub.pdf and pub.pdf != '' %}<a href="{{ pub.pdf }}">[PDF]</a>&nbsp; {% endif %}
+          {% if pub.link and pub.link != '' %}<a href="{{ pub.link }}">[Project Page]</a>&nbsp; {% endif %}
+          {% if pub.code and pub.code != '' %}<a href="{{ pub.code }}">[Code]</a>{% endif %}
+        </div>
+      </div>
+    </div>
+    <hr>
+    {% endfor %}
+  </div>
+</article>

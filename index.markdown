@@ -8,7 +8,8 @@ heading: Zhaoning Wang
 ---
 
 <p style="text-align: center;">⬆️ Try to drag around!! ⬆️</p>
-<p style="text-align: center;">Figure 1. Zhaoning Wang when he finally realize why there are only straight faces in NeRF datasets.</p>
+<p style="text-align: center;">Me in 3D, There is no way to keep smiling while being scanned...</p>
+<p style="text-align: center; font-size: 1.2em;"><a href="/photos/"> ➡️ If you want to get to know me more in 2D... ⬅️</a></p>
 
 # <span style="color:#A31F34"><b>About me</b></span>
 
@@ -19,7 +20,7 @@ heading: Zhaoning Wang
 
 <!-- I am Zhaoning Wang, a research Master's student at the Center of Research in Computer Vision ([CRCV](https://www.crcv.ucf.edu/)) of University of Central Florida (UCF). I am advised by Prof. [Chen Chen](https://www.crcv.ucf.edu/chenchen/). Before that, I was a visiting research scholar at Human Sensing Lab at Robotic Institute (RI) at CMU, where I am fortunate to work with prof.[Fernando De la Torre](https://www.cs.cmu.edu/~ftorre/). I obtained the Bachelor's degree of Computer Science and Computer Engineering at Unviersity of Wisconsin-Madison, advised by Prof. [Yixuan Sharon Li](https://pages.cs.wisc.edu/~sharonli/). -->
 <!-- I am Zhaoning Wang, currently a Research Assistant at [Hillbot Inc.](https://www.hillbot.ai/) and Sulab with Prof. [Hao Su](https://cseweb.ucsd.edu/~haosu/). I obtained my Master's degree at the Center of Research in Computer Vision ([CRCV](https://www.crcv.ucf.edu/)) in University of Central Florida (UCF), advised by Prof. [Chen Chen](https://www.crcv.ucf.edu/chenchen/). Before that, I was a visiting research scholar at Human Sensing Lab at Robotic Institute (RI) at CMU, where I am fortunate to work with prof. [Fernando De la Torre](https://www.cs.cmu.edu/~ftorre/). I obtained the Bachelor's degree of Computer Science and Computer Engineering at University of Wisconsin-Madison. -->
-I am Zhaoning Wang, currently an incoming PhD student at University of Michigan, advised by Prof. [Jun Gao](https://www.cs.toronto.edu/~jungao/). Previously, I was fortunate to intern at [Hillbot Inc.](https://www.hillbot.ai/) and [Sulab](https://cseweb.ucsd.edu/~haosu/),  where I was mentored by Dr. [Minghua Liu](https://cseweb.ucsd.edu/~mil070/). 
+I am Zhaoning Wang, currently a PhD student at University of Michigan, advised by Prof. [Jun Gao](https://www.cs.toronto.edu/~jungao/). Previously, I was fortunate to intern at [Hillbot Inc.](https://www.hillbot.ai/) and [Sulab](https://cseweb.ucsd.edu/~haosu/),  where I was mentored by Dr. [Minghua Liu](https://cseweb.ucsd.edu/~mil070/). 
 I also had amazing experience working with Prof. [Chen Chen](https://www.crcv.ucf.edu/chenchen/), [Fernando De la Torre](https://www.cs.cmu.edu/~ftorre/) and [Sharon Li](https://pages.cs.wisc.edu/~sharonli/).
 
 <br />

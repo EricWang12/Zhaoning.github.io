@@ -1,218 +1,80 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+<head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
-<title>Zhaoning Wang</title>
-<meta name="generator" content="Jekyll v4.1.1" />
-<meta property="og:title" content="About" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="Hello, and thank you for trying to know me :)" />
-<meta property="og:description" content="Hello, and thank you for trying to know me :)" />
-<link rel="canonical" href="http://localhost:4000/" />
-<meta property="og:url" content="http://localhost:4000/" />
-<meta property="og:site_name" content="Zhaoning Wang" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="About" />
-<script type="application/ld+json">
-{"@type":"WebSite","url":"http://localhost:4000/","headline":"About","description":"Hello, and thank you for trying to know me :)","name":"Zhaoning Wang","@context":"https://schema.org"}</script>
-<!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Zhaoning Wang" />
-<script>
-  window.onload = function() {
-    var divs = document.getElementsByClassName("publinks");
-    for (var i = 0; i < divs.length; i++) {
-      var elements = divs[i].querySelectorAll("[href='']");
-      for (var j = 0; j < elements.length; j++) {
-        elements[j].style.display = "none";
-      }
-    }
-  };
-</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ site.title }}</title>
+  <meta name="description" content="{{ site.description | escape }}">
+  <link rel="canonical" href="{{ site.url }}/">
+  <link rel="stylesheet" href="{{ '/assets/main.css' | relative_url }}">
+  <link type="application/atom+xml" rel="alternate" href="{{ '/feed.xml' | relative_url }}" title="{{ site.title }}">
 </head>
 <body>
-  <!-- <header class="site-header" role="banner">
+  {% include header.html %}
+  <main class="page-content" aria-label="Content">
+    <div class="wrapper">
+      <article class="post">
+        <header class="post-header">
+          <h1 class="post-title">{{ page.heading }}</h1>
+        </header>
 
-  <div class="wrapper"><a class="site-title" rel="author" href="/">Zhaoning Wang</a><nav class="site-nav">
-        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
-        <label for="nav-trigger">
-          <span class="menu-icon">
-            <svg viewBox="0 0 18 15" width="18px" height="15px">
-              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
-            </svg>
-          </span>
-        </label>
+        {% capture me_left %}{% include_relative me-left.md %}{% endcapture %}
+        {{ me_left | markdownify }}
 
-        <div class="trigger"><a class="page-link" href="/Posts/">Posts</a><a class="page-link" href="/Projects/">Projects</a><a class="page-link" href="/">About</a></div>
-      </nav></div>
-</header> -->
-<main class="page-content" aria-label="Content">
-      <div class="wrapper">
-        <article class="post">
+        <div class="post-content">
+          {{ content }}
 
-  <header class="post-header">
-    <h1 class="post-title">{{page.heading}}</h1>
-  </header>
+          {% assign publications = site.publications | sort: "month" | sort: "year" | reverse %}
+          {% for pub in publications %}
+          <div class="pubitem">
+            <div class="pubteaser">
+              <a href="{% if pub.link != '' and pub.link %}{{ pub.link }}{% else %}{{ pub.url }}{% endif %}">
+                <img src="{{ '/assets/images/publications/' | relative_url }}{{ pub.slug }}.png" alt="{{ pub.title }}"/>
+              </a>
+            </div>
+            <div class="pubdetails">
+              <div class="pubtitle">{{ pub.title }}</div>
+              <div class="pubauthors">{{ pub.authors }}</div>
+              <div class="pubinfo">{{ pub.publication }}, {{ pub.year }}</div>
+              <div class="publinks">
+                {% if pub.pdf and pub.pdf != '' %}<a href="{{ pub.pdf }}">[PDF]</a>&nbsp; {% endif %}
+                {% if pub.link and pub.link != '' %}<a href="{{ pub.link }}">[Project Page]</a>&nbsp; {% endif %}
+                {% if pub.code and pub.code != '' %}<a href="{{ pub.code }}">[Code]</a>{% endif %}
+              </div>
+            </div>
+          </div>
+          <hr>
+          {% endfor %}
 
-
-
-  <style>
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-    }
-    .right{    flex: 1 0 auto;    flex-basis:0%; height:300px; position:relative;}
-    .left{    flex: 1 0 auto;flex-basis:100%; height:400px; position:relative;}
-    @media (max-width: 768px) {
-      .container {
-        flex-direction: column;
-      }
-    }
-    
-    </style>
-    <div class="container">
-      <div class="left" style="float: left;">{% capture my_include %}{% include_relative me-left.md %}{% endcapture %}
-          {{ my_include | markdownify }}<br></div>
-    <div class="right" style="float: right;">{% capture my_include %}{% include_relative me-right.md %}{% endcapture %}
-    {{ my_include | markdownify }}</div>
-  </div>
-
-    <div class="post-content" >
-        {{content}}
-    <style>
-      
-/* add additional CSS rules below */
-
-.pubitem {
-  margin: 2em 0;
-  line-height: 1em;
-}
-
-.pubtitle {
-  font-size: 125%;
-  margin-bottom: .5em;
-  line-height: 1.2em;
-  font-weight: bold;
-}
-
-.pubauthors, .pubinfo {
-  font-size: 90%;
-  margin-bottom: .5em;
-  text-decoration: none;
-}
-
-.pubteaser {
-  clear: both;
-}
-
-.pubteaser a {
-  float: left;
-  margin-right: 1em;
-}
-
-.pubteaser img {
-  height: 125px;
-  width: 185px;
-
-  border: 1px solid black;
-}
-
-.publinks {
-  font-size: 90%;
-}
-
-.publication-authors {
-  margin: 0.5rem 0;
-}
-
-.publication-info {
-  margin: 0.5rem 0;
-}
-
-.publication-teaser {
-  margin: 2em;
-}
-
-.publication-teaser img {
-  border: none;
-}
-a {
-  color:#0077bc;
-  text-decoration: none;
-}
-
-a:hover {
-  color:#A31F34; 
-  text-decoration:none; 
-  cursor:pointer;  
-}
-    </style>
-    {% assign publications = site.publications | sort: "year" | reverse | sort: "month" | reverse %}
-    {% for pub in publications %}
-    <div class="pubitem">
-
-      <div class="pubteaser">
-        <a href="{{pub.url}}">
-          <img src="assets/images/publications/{{ pub.slug }}.png"/>
-        </a>
-   
-      </div>
-      <div class="pubtitle">
-        {{ pub.title }}
-      </div>
-      <div class="pubauthors">
-        {{ pub.authors }}
-      </div>
-      <div class="pubinfo">
-        {{ pub.publication }}, {{ pub.year}}
-      </div>
-      <div  class="publinks">
-        <a href="{{pub.pdf}}"><i class="far fa-file-pdf"></i>  &nbsp; <b>PDF</b> &nbsp;</a>
-        <a href="{{pub.link}}"><i class="fas fa-arrow-right"></i> &nbsp; <b>Project Page</b> &nbsp;</a>
-        <a href="{{pub.code}}"><i class="fas fa-arrow-right"></i> &nbsp; <b>Code</b> &nbsp; </a>
-      </div>
+          {% assign projects = site.projects | sort: "year" | reverse %}
+          {% if projects.size > 0 %}
+          <h1><span style="color:#A31F34"><b>Projects</b></span></h1>
+          {% for pub in projects %}
+          <div class="pubitem">
+            <div class="pubteaser">
+              <a href="{% if pub.link != '' and pub.link %}{{ pub.link }}{% else %}{{ pub.url }}{% endif %}">
+                <img src="{{ '/assets/images/publications/' | relative_url }}{{ pub.slug }}.png" alt="{{ pub.title }}"/>
+              </a>
+            </div>
+            <div class="pubdetails">
+              <div class="pubtitle">{{ pub.title }}</div>
+              <div class="pubauthors">{{ pub.authors }}</div>
+              <div class="pubinfo">{{ pub.publication }}, {{ pub.year }}</div>
+              <div class="publinks">
+                {% if pub.pdf and pub.pdf != '' %}<a href="{{ pub.pdf }}">[PDF]</a>&nbsp; {% endif %}
+                {% if pub.link and pub.link != '' %}<a href="{{ pub.link }}">[Project Page]</a>&nbsp; {% endif %}
+                {% if pub.code and pub.code != '' %}<a href="{{ pub.code }}">[Code]</a>{% endif %}
+              </div>
+            </div>
+          </div>
+          <hr>
+          {% endfor %}
+          {% endif %}
+        </div>
+      </article>
     </div>
-    <hr>
-    {% endfor %}
-    <!-- <h1 class="mt-4" style="color:#A31F34"><b>Projects</b></h1> -->
-    {% assign publications = site.projects | sort: "year" | reverse %}
-    {% for pub in publications %}
-    <div class="pubitem">
-
-      <div class="pubteaser">
-        <a href="{{pub.url}}">
-          <img src="assets/images/publications/{{ pub.slug }}.png"/>
-        </a>
-   
-      </div>
-      <div class="pubtitle">
-        {{ pub.title }}
-      </div>
-      <div class="pubauthors">
-        {{ pub.authors }}
-      </div>
-      <div class="pubinfo">
-        {{ pub.publication }}, {{ pub.year}}
-      </div>
-      <div  class="publinks">
-        <a href="{{pub.pdf}}"><i class="far fa-file-pdf"></i>  &nbsp; <b>PDF</b> &nbsp;</a>
-        <a href="{{pub.link}}"><i class="fas fa-arrow-right"></i> &nbsp; <b>Project Page</b> &nbsp;</a>
-        <a href="{{pub.code}}"><i class="fas fa-arrow-right"></i> &nbsp; <b>Code</b> &nbsp; </a>
-      </div>
-    </div>
-    <hr>
-    {% endfor %}
-
-  </div>
-     <!-- <h1 class="mt-4">Publications</h1> -->
-  <!-- <script type='text/javascript' id='clustrmaps' src='//cdn.clustrmaps.com/map_v2.js?cl=ffffff&w=a&t=n&d=IG3Y3SE8mEXIE1TN2kK8VxR_NGP5NuEFWY6txLQVcWo'></script> -->
-</article>
-
-      </div>
-    </main><footer class="site-footer h-card">
-      {% include footer.html %}
-
-</footer>
+  </main>
+  {% include footer.html %}
 </body>
-
 </html>
