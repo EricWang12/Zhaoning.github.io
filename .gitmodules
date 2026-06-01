@@ -6,3 +6,7 @@
 	path = PartUV
 	url = https://github.com/EricWang12/PartUV.git
 	branch = page
+[submodule "AFUN"]
+	path = AFUN
+	url = https://github.com/EricWang12/AFUN-webpage.git
+	branch = main
