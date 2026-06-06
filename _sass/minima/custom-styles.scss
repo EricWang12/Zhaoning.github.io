@@ -55,6 +55,25 @@ a:hover {
   margin-top: .4em;
 }
 
+// On phones / narrow screens, stack the details beneath the teaser image
+// (instead of a squished side column that wraps author names vertically).
+@media (max-width: 600px) {
+  .pubitem {
+    flex-direction: column;
+    gap: 0.8em;
+  }
+
+  .pubteaser {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  .pubteaser img {
+    width: 100%;
+    height: auto;
+  }
+}
+
 // Photo gallery
 .gallery-grid {
   display: grid;
