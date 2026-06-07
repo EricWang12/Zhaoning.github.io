@@ -5,3 +5,6 @@ _site
 vendor
 
 .DS_Store/
+
+PartUV/result/shapes_resized_512/
+

@@ -7,8 +7,10 @@ title: "About"
 heading: Zhaoning Wang
 ---
 
+<div id="luma-captions">
 <p style="text-align: center;">⬆️ Try to drag around!! ⬆️</p>
 <p style="text-align: center;">Me in 3D, There is no way to keep smiling while being scanned...</p>
+</div>
 <p style="text-align: center; font-size: 1.2em;"><a href="/photos/"> ➡️ If you want to get to know me more in 2D... ⬅️</a></p>
 
 # <span style="color:#A31F34"><b>About me</b></span>
@@ -29,7 +31,7 @@ I also had amazing experience working with Prof. [Chen Chen](https://www.crcv.uc
 
 I am interested in using state-of-the-art deep learning and computer vision to improve machine perceptions and let them aware of their surroundings. 
 
-I am particularly interested in **3D Neural Representations**, **3D reconstructions**, **Generative Networks** and **Foundation Models**. I am also keen on **data-driven computer vision** or **synthetic data**. I believe these will fundamentally help to bridge the gap between the virtual and physical world, i.e. Computers and Reality, and enabling the next generation of embodied AI systems.
+I am particularly interested in **Perception and Understanding**, **Embodied AI**, and **World Models**. I am also keen on **Data-Driven Computer Vision** and **Computer Graphics**. I believe these areas will fundamentally help bridge the gap between the virtual and physical worlds—that is, between Computers and Reality—and enable the next generation of Embodied AI systems.
 
 
 I'm always open to research collaborations in this area. Feel free to drop me an email at : 

@@ -39,7 +39,11 @@
     if (!box || !frame) { return; }
     var loaded = false;
     function showFallback() {
-      if (!loaded) { box.classList.add('is-fallback'); }
+      if (!loaded) {
+        box.classList.add('is-fallback');
+        var captions = document.getElementById('luma-captions');
+        if (captions) { captions.style.display = 'none'; }
+      }
     }
     frame.addEventListener('load', function () { loaded = true; });
     frame.addEventListener('error', showFallback);
