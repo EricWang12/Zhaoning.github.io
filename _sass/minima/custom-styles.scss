@@ -82,7 +82,8 @@ a:hover {
   margin-top: 1.5rem;
 }
 
-.gallery-item img {
+.gallery-item img,
+.gallery-item video {
   width: 100%;
   height: auto;
   border-radius: 4px;

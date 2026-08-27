@@ -1,5 +1,10 @@
 [
   {
+    "image": "headshot.jpeg",
+    "caption": "My go-to headshot",
+    "size": "half"
+  },
+  {
     "image": "fall_road.jpeg",
     "caption": "Nothing beats the fall colors in North Michigan",
     "size": "full"
@@ -12,6 +17,22 @@
   {
     "image": "mountain_climb.jpeg",
     "caption": "Hit me up if you want to go on this triple black diamond ♦♦♦ in Big Sky with me!",
+    "size": "half"
+  },
+
+  {
+    "image": "mendota_pier.jpeg",
+    "caption": "On Wisconsin! Lake Mendota,",
+    "size": "half"
+  },
+  {
+    "image": "Rabbit.jpeg",
+    "caption": "Spent a whole afternoon processed a whole rabbit and made this 麻辣兔肉🌶️",
+    "size": "half"
+  },
+  {
+    "video": "tamedog.mp4",
+    "caption": "Bet you are not a better borader than I am - Do this sideflip!!",
     "size": "half"
   }
 ]

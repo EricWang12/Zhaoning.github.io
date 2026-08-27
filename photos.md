@@ -13,7 +13,11 @@ permalink: /photos/
     <div class="gallery-grid">
       {% for item in site.data.gallery %}
       <div class="gallery-item{% if item.size == 'full' %} gallery-item--full{% endif %}">
+        {% if item.video %}
+        <video src="{{ '/assets/images/gallery/' | relative_url }}{{ item.video }}" aria-label="{{ item.caption }}" controls loop muted autoplay playsinline></video>
+        {% else %}
         <img src="{{ '/assets/images/gallery/' | relative_url }}{{ item.image }}" alt="{{ item.caption }}"/>
+        {% endif %}
         <p class="gallery-caption">{{ item.caption }}</p>
       </div>
       {% endfor %}
