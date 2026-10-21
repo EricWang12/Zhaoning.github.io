@@ -1,0 +1,88 @@
+---
+layout: null
+sitemap: false
+---
+{% raw %}<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Real-to-Sim Gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap">
+<!-- An unlisted page: no link to it from the site, no sitemap entry, noindex. Its content is not in this repository: it reads
+     gallery.json and the videos from a Cloudflare R2 bucket, which the r2s-lite live view's "Publish to website" button writes
+     (r2slite/live/publish.py), so an update of the gallery needs no push of this site. -->
+<style>
+  :root {
+    --bg: #f4f5f7; --surface: #ffffff; --line: #dde1e7; --fg: #16202c; --muted: #5b6676;
+    --ok: #1f8a5b; --warn: #b7791f; --bad: #c63b3b; --none: #8a94a3;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #10141a; --surface: #171d26; --line: #29323f; --fg: #e6ebf2; --muted: #95a1b3;
+            --ok: #5cc996; --warn: #e6b23c; --bad: #ef7272; --none: #6b7686; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 'Source Sans 3', system-ui, sans-serif; }
+  main { max-width: 1800px; margin: 0 auto; padding: 28px 16px 48px; display: grid; gap: 18px; }
+  h1 { margin: 0; font: 700 28px/1.2 Archivo, 'Helvetica Neue', Arial, sans-serif; }
+  .meta { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+  .card { display: grid; gap: 10px; align-content: start; background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+          padding: 14px 16px; }
+  .task { margin: 0; font: 700 22px/1.3 Archivo, 'Helvetica Neue', Arial, sans-serif; }
+  .text { margin: 0; font-size: 16px; }
+  figure { margin: 0; display: grid; gap: 3px; }
+  video { width: 100%; display: block; background: #000; border-radius: 8px; }
+  figcaption { font-size: 12px; color: var(--muted); }
+  .details { margin: 0; font-size: 12px; color: var(--muted); }
+  .badge { display: inline-block; padding: 0 7px; border-radius: 999px; font-size: 11px; font-weight: 600; line-height: 18px; color: var(--surface); }
+  .accepted { background: var(--ok); } .unverified { background: var(--warn); } .failed { background: var(--bad); } .other { background: var(--none); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1 id="title">Real-to-Sim Gallery</h1>
+    <p class="meta" id="meta">Loading…</p>
+  </header>
+  <section class="grid" id="grid" aria-label="Results"></section>
+</main>
+<script>
+// Where the gallery lives: the R2 bucket's public address. ?src=<url of a gallery.json> overrides it (to try another bucket).
+const GALLERY = new URLSearchParams(location.search).get('src') || 'https://pub-2f4bc478fe9d4b3bb5db4a81fbb1d24f.r2.dev/gallery.json';
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const KIND = { accepted: 'accepted', unverified: 'unverified', failed: 'failed' };
+
+// Each video plays by itself, muted and looped, while it is on screen, and pauses when it scrolls away.
+const shown = new IntersectionObserver((entries) => {
+  for (const e of entries) {
+    if (e.isIntersecting) { if (!e.target.src) e.target.src = e.target.dataset.src; e.target.play().catch(() => {}); } else e.target.pause();
+  }
+}, { rootMargin: '200px' });
+
+function card(item) {
+  const videos = item.videos.map((v) => `<figure><video muted loop playsinline preload="none" data-src="${esc(v.url)}"></video>
+      <figcaption>${v.side_by_side ? 'real | simulated | outlines' : 'simulated'} · ${esc(v.label.replace(/_/g, ' '))}</figcaption></figure>`).join('');
+  return `<article class="card"><h2 class="task">${esc(item.task || '')}</h2>
+    ${item.text ? `<p class="text">${esc(item.text)}</p>` : ''}${videos}
+    <p class="details"><span class="badge ${KIND[item.verification] || 'other'}">${esc(item.verification)}</span>${item.reached && item.reached !== 'none' ? ` reached ${esc(item.reached)}` : ''}</p></article>`;
+}
+
+fetch(GALLERY, { cache: 'no-cache' })
+  .then((reply) => { if (!reply.ok) throw new Error(`HTTP ${reply.status}`); return reply.json(); })
+  .then((page) => {
+    document.title = page.title || document.title;
+    document.getElementById('title').textContent = page.title || 'Real-to-Sim Gallery';
+    document.getElementById('meta').textContent = `${page.items.length} result${page.items.length === 1 ? '' : 's'}`
+      + (page.updated_at ? ` · updated ${page.updated_at.slice(0, 10)}` : '');
+    document.getElementById('grid').innerHTML = page.items.map(card).join('');
+    document.querySelectorAll('video').forEach((v) => shown.observe(v));
+  })
+  .catch((error) => { document.getElementById('meta').textContent = `The gallery could not be loaded (${error.message}).`; });
+</script>
+</body>
+</html>
+{% endraw %}
