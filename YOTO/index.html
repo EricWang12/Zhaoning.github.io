@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>You Only Teach Once</title>
-<meta name="description" content="You Only Teach Once: Agentic Real-to-Sim and Robot Learning from a Single Demonstration. Zhaoning Wang, Siyi Chen, Jun Gao, University of Michigan.">
+<meta name="description" content="You Only Teach Once: Robust Agentic Real-to-Sim from a Single Demonstration. Zhaoning Wang, Siyi Chen, Jun Gao, University of Michigan.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&display=swap" rel="stylesheet">
 <style>
@@ -107,7 +107,8 @@
   .hint { left:10px; bottom:9px; } .vis.dim .hint { opacity:0; }
   .legend3 { right:10px; top:10px; opacity:0; } .legend3.on { opacity:1; }
   .legend3 b { display:inline-block; width:9px; height:9px; border-radius:50%; margin:0 5px 0 8px; } .legend3 b:first-child { margin-left:0; }
-  .step { display:none; } .step.on { display:block; animation:stepin .5s ease; }
+  #stepTexts { display:grid; }               /* every step in one cell: the column keeps the tallest step's height, so nothing jumps */
+  .step { grid-area:1/1; align-self:center; visibility:hidden; } .step.on { visibility:visible; animation:stepin .5s ease; }
   @keyframes stepin { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
   .step .n { font-size:13px; color:var(--muted); margin:0 0 6px; }
   .step .title { font-stretch:118%; font-weight:760; font-size:28px; letter-spacing:-0.015em; margin:0 0 10px; }
@@ -122,29 +123,58 @@
   .ctl { display:flex; justify-content:space-between; align-items:center; margin-top:12px; font-size:12.5px; color:var(--muted); }
   .ctl button { font:inherit; font-size:12.5px; padding:4px 12px; border-radius:20px; border:1px solid var(--rule); background:transparent; color:var(--ink); cursor:pointer; }
 
+  /* the Align step's picture under its text: the real arm (white), the recorded camera pose (red) and the pose being fitted
+     (green), whose outline moves with the camera in the 3D view (an illustration: the motion is exaggerated) */
+  .key { display:inline-flex; align-items:center; gap:7px; white-space:nowrap; }
+  .key::before { content:''; width:24px; border-top:3px solid; }
+  .key.w::before { border-color:#fff; } .key.r::before { border-top-style:dashed; border-color:rgb(255,40,40); } .key.g::before { border-top-style:dotted; border-color:rgb(60,255,60); }
+  .armfig { margin:16px 0 0; }
+  .armv { position:relative; aspect-ratio:880/495; border-radius:6px; overflow:hidden; background:#000; }
+  .armv img { position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .armv .red { transform:translateY(7%); }
+  .armset { position:absolute; inset:0; opacity:0; transition:opacity .45s; } .armset.on { opacity:1; }
+  .armtag { position:absolute; left:8px; top:8px; font-size:11.5px; font-weight:600; padding:2px 9px; border-radius:12px; background:rgba(0,0,0,.62); color:#fff; }
+  .armstate { font-size:13px; color:var(--ink); margin:9px 0 5px; min-height:2.6em; line-height:1.3; }
+  .armkeys { display:flex; flex-wrap:wrap; gap:4px 14px; font-size:12px; color:var(--soft); margin:0; }
+
   /* placeholders */
   .ph { position:relative; border-radius:5px; background:repeating-linear-gradient(135deg, #1B1E23 0 14px, #1E2127 14px 28px); border:1px solid var(--rule);
         display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px; aspect-ratio:640/342; }
   .ph::before { content:''; width:0; height:0; border-left:16px solid #59606A; border-top:10px solid transparent; border-bottom:10px solid transparent; margin-right:10px; }
-  .cols { display:grid; grid-template-columns:1fr 1fr; gap:28px; }
-  .vids figure { margin:0; } .vids video { width:100%; display:block; border-radius:10px; background:var(--panel); aspect-ratio:16/9; object-fit:cover; box-shadow:0 18px 44px rgba(0,0,0,.4); }
-  .vids figcaption { font-size:14.5px; color:var(--soft); margin-top:14px; line-height:1.5; }
-  .vids figcaption b { display:block; font-stretch:114%; font-weight:720; font-size:20px; color:var(--ink); margin-bottom:4px; }
-  .results { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; font-size:14px; color:var(--muted); }
-  .results span { border:1px dashed #3A4049; border-radius:20px; padding:5px 13px; }
-  .cols h3 { font-stretch:112%; font-weight:700; font-size:18px; margin:0 0 4px; }
-  .cols .res { font-size:13px; color:var(--muted); margin:0 0 14px; }
-  .cols .res span { border:1px dashed #3A4049; border-radius:20px; padding:1px 9px; margin-left:4px; }
-  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .grid3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+  .sub { font-stretch:112%; font-weight:700; font-size:20px; margin:46px 0 14px; }
   .cap3 { font-size:13.5px; color:var(--soft); margin:8px 0 0; }
-  .flow { display:grid; grid-template-columns:minmax(0,1fr) 36px minmax(0,1fr) 36px minmax(0,1fr); align-items:center; }
-  .flow .arrow { justify-self:center; width:20px; height:20px; }
-  .flow h3 { font-stretch:112%; font-weight:700; font-size:16px; margin:12px 0 4px; } .flow p { font-size:13.5px; color:var(--soft); margin:0; line-height:1.5; }
+  .branch { position:relative; display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:34px 44px; align-items:start; }
+  .branch .node { position:relative; z-index:1; }
+  .branch .vslot { width:100%; display:block; aspect-ratio:640/342; object-fit:cover; border-radius:5px; background:var(--panel); } #nWithout { grid-column:4; grid-row:2; }
+  .branch .links { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+  .branch .links path { fill:none; stroke:#8C949E; stroke-width:1.6; } .branch .links path.ctx { stroke:#5FAE86; }
+  .branch .links text { fill:#8C949E; font:500 13px 'Archivo', system-ui, sans-serif; }
+  .note { aspect-ratio:640/342; border-radius:5px; border:1px solid #35553F; background:#152019; padding:10px 12px; font-size:12px; color:var(--soft);
+          display:flex; flex-direction:column; gap:5px; }
+  .note b { color:#BFE8CB; font-size:12.5px; font-stretch:108%; }
+  .note dl { display:grid; grid-template-columns:auto 1fr; gap:2px 10px; margin:0; } .note dt { color:var(--ink); font-weight:600; } .note dd { margin:0; }
+  .note span { color:var(--muted); font-size:11.5px; }
+  .scores { margin-top:34px; } .scores-h { font-size:14px; color:var(--muted); margin:0 0 6px; }
+  .scores table { border-collapse:collapse; font-size:14px; width:min(680px, 100%); }
+  .scores th, .scores td { text-align:left; padding:9px 14px 9px 0; border-bottom:1px solid var(--rule); font-weight:500; }
+  .scores thead th { color:var(--muted); font-size:13px; font-weight:600; vertical-align:bottom; }
+  .scores .def { display:block; font-weight:400; font-size:12.5px; line-height:1.4; margin-top:4px; max-width:30ch; } .scores tbody th { color:var(--ink); }
+  .scores td { font-variant-numeric:tabular-nums; font-size:15px; } .scores tr.best td, .scores tr.best th { font-weight:700; }
+  .scores a { text-decoration:none; } .scores a:hover { text-decoration:underline; text-underline-offset:3px; }
+  .scores td a { display:block; } .scores td:hover { background:rgba(236,238,241,.05); }
+  .scores-more { margin:12px 0 0; font-size:14px; } .scores-more a { color:var(--ink); text-underline-offset:3px; }
+  .sub-lede { color:var(--soft); font-size:15px; line-height:1.55; max-width:76ch; margin:-4px 0 18px; }
+  .real2 { display:grid; grid-template-columns:1fr 1fr; gap:22px; } .real2 figure { margin:0; }
+  .real2 .vbox { position:relative; } .real2 video { width:100%; display:block; aspect-ratio:16/9; object-fit:cover; border-radius:8px; background:var(--panel); }
+  .real2 .badge { position:absolute; left:10px; top:10px; font-size:13px; font-weight:700; padding:3px 11px; border-radius:12px; pointer-events:none; }
+  .real2 .badge.ok { background:rgba(27,94,32,.85); color:#E8F5E9; } .real2 .badge.no { background:#D32F2F; color:#fff; }
+  .real2 figure.fail video { outline:3px solid #E53935; outline-offset:-3px; }
+  .real2 figcaption { font-size:14.5px; color:var(--soft); line-height:1.55; margin-top:12px; } .real2 figcaption b { display:block; color:var(--ink); font-size:17px; font-stretch:112%; margin-bottom:3px; }
+  .branch h3 { font-stretch:112%; font-weight:700; font-size:16px; margin:12px 0 4px; } .branch p { font-size:13.5px; color:var(--soft); margin:0; line-height:1.5; }
   footer { border-top:1px solid var(--rule); margin-top:80px; padding:28px 0 40px; font-size:13.5px; color:var(--muted); }
   @media (max-width: 900px) {
-    .strip { grid-auto-columns:calc((100% - var(--gap)) / 1.6); } #real-to-sim .head { display:block; } .pop .heads { font-size:12px; } .row, .cols { grid-template-columns:1fr; } .steps { grid-template-columns:repeat(4,1fr); }
-    .grid3 { grid-template-columns:1fr; } .flow { grid-template-columns:1fr; } .flow .arrow { transform:rotate(90deg); margin:10px 0; }
+    .strip { grid-auto-columns:calc((100% - var(--gap)) / 1.6); } #real-to-sim .head { display:block; } .pop .heads { font-size:12px; } .row { grid-template-columns:1fr; } .steps { grid-template-columns:repeat(4,1fr); }
+    .real2 { grid-template-columns:1fr; } .branch { grid-template-columns:1fr; gap:24px; } .branch .links { display:none; } #nWithout { grid-column:auto; grid-row:auto; }
     .bar-top .name { display:none; } .h { font-size:30px; }
   }
 </style>
@@ -154,16 +184,16 @@
 
 <header class="bar-top" id="barTop">
   <a class="name" href="#top">You Only Teach Once</a>
-  <nav class="nav" aria-label="Sections"><a href="#real-to-sim">Real-to-sim demos</a><a href="#how">How it works</a><a href="#icl">In-context learning demos</a><a href="#real">Real demos</a><a href="#sim2real">Real-to-sim-to-real</a></nav>
+  <nav class="nav" aria-label="Sections"><a href="#real-to-sim">Real-to-sim demos</a><a href="#how">How it works</a><a href="#sim2real">Real-to-sim-to-real</a></nav>
 </header>
 
 <section id="top">
   <div class="mosaic" id="mosaic"></div><div class="veil"></div>
   <div class="center">
-    <h1>You Only Teach Once: Agentic Real-to-Sim and Robot Learning from a Single Demonstration</h1>
+    <h1>You Only Teach Once: Robust Agentic Real-to-Sim from a Single Demonstration</h1>
     <p class="who">Zhaoning Wang, Siyi Chen, Jun Gao</p>
     <p class="aff">University of Michigan</p>
-    <nav class="nav" aria-label="Sections"><a href="#real-to-sim">Real-to-sim demos</a><a href="#how">How it works</a><a href="#icl">In-context learning demos</a><a href="#real">Real demos</a><a href="#sim2real">Real-to-sim-to-real</a></nav>
+    <nav class="nav" aria-label="Sections"><a href="#real-to-sim">Real-to-sim demos</a><a href="#how">How it works</a><a href="#sim2real">Real-to-sim-to-real</a></nav>
   </div>
   <a class="cue" href="#real-to-sim">Scroll for the demos</a>
 </section>
@@ -182,7 +212,7 @@
 
 <section class="block" id="how"><div class="wrap">
   <h2 class="h">How it works</h2>
-  <p class="lede">From one recorded demonstration to a physics scene that replays it. An agent runs each tool and checks the result before moving on. The steps play on their own; drag the scene to look around.</p>
+  <p class="lede">From one recorded demonstration to a physics scene that replays it. The robot arm itself aligns the cameras, and an agent runs each tool and checks the result before moving on. The steps play on their own; drag the scene to look around.</p>
   <div class="deck" id="deck">
     <div class="row">
       <div class="vis" id="vis">
@@ -199,35 +229,40 @@
   </div>
 </div></section>
 
-<section class="block" id="icl"><div class="wrap">
-  <h2 class="h">In-context learning demos</h2>
-  <p class="lede">The demonstration also teaches a robot agent. Its twin is reshuffled into new layouts, where the agent practises the task and revises its playbook; the model's weights never change.</p>
-  <p class="ph-note">Placeholder section: videos and results to come</p>
-  <div class="cols">
-    <div><h3>The reconstructed twin</h3><p class="res">The demonstration replayed in simulation</p><div class="ph">Twin video</div></div>
-    <div><h3>One of the shuffled layouts</h3><p class="res">The same twin with the objects in new places, where the agent practises</p><div class="ph">Shuffled layout video</div></div>
-  </div>
-  <div class="results"><span>Before practice: result to come</span><span>After practice: result to come</span></div>
-</div></section>
-
-<section class="block" id="real"><div class="wrap">
-  <h2 class="h">Real demos</h2>
-  <p class="lede">The real robot doing the tasks.</p>
-  <p class="ph-note">Placeholder section: real robot videos to come</p>
-  <div class="grid3"><div><div class="ph">Real robot video</div><p class="cap3">Task name</p></div><div><div class="ph">Real robot video</div><p class="cap3">Task name</p></div><div><div class="ph">Real robot video</div><p class="cap3">Task name</p></div></div>
-</div></section>
-
 <section class="block" id="sim2real"><div class="wrap">
   <h2 class="h">Real-to-sim-to-real</h2>
-  <p class="lede">What the agent learned by practising in the twin, run back on the real robot.</p>
-  <p class="ph-note">Placeholder section: videos to come</p>
-  <div class="flow">
-    <div><div class="ph">Real demonstration</div><h3>One real demonstration</h3><p>The robot is taught the task once.</p></div>
-    <svg class="arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h12M11 5l5 5-5 5" fill="none" stroke="#8C949E" stroke-width="1.8"/></svg>
-    <div><div class="ph">Practice in the twin</div><h3>Practice in the twin</h3><p>The agent practises new layouts in simulation.</p></div>
-    <svg class="arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h12M11 5l5 5-5 5" fill="none" stroke="#8C949E" stroke-width="1.8"/></svg>
-    <div><div class="ph">On the real robot</div><h3>Back on the real robot</h3><p>The practised playbook runs on new real layouts.</p></div>
+  <p class="lede">The verified twin also gives a robot agent its context. From the replayed demonstration and the scene's measurements we write a demonstration context: the person's sequence as tool calls, and measured numbers relative to the objects. The agent (ORA) then runs the task twice on new layouts, once with the context and once without it; its model weights never change.</p>
+  <div class="branch" id="branch">
+    <div class="node" id="nDemo"><div class="slot"><video class="vslot" muted loop playsinline preload="none" poster="assets/r2s2r/demo.jpg" data-src="assets/r2s2r/demo.mp4" aria-label="The real demonstration: two blocks into the cabinet on the SO-101 arm"></video></div><h3>One real demonstration</h3><p>A person teaches the task once on the SO-101 arm. 2× speed.</p></div>
+    <div class="node" id="nTwin"><div class="slot"><video class="vslot" muted loop playsinline preload="none" poster="assets/r2s2r/twin.jpg" data-src="assets/r2s2r/twin.mp4" aria-label="The twin in simulation replaying the demonstration"></video></div><h3>The verified twin</h3><p>Its replay in simulation reproduces the demonstration. 2× speed.</p></div>
+    <div class="node" id="nCtx"><div class="slot note"><b>Demonstration context</b>
+      <dl><dt>Grasp</dt><dd>3.1 cm above its bottom</dd><dt>Lift</dt><dd>straight up 7.0 cm</dd><dt>Release</dt><dd>1.3 cm above the opening</dd></dl>
+      <span>+ the person's sequence as tool calls</span></div>
+      <h3>Demonstration context</h3><p>Measured in the twin: what the agent reads, not new weights.</p></div>
+    <div class="node" id="nWith"><div class="slot"><video class="vslot" muted loop playsinline preload="none" poster="assets/r2s2r/with-context.jpg" data-src="assets/r2s2r/with-context.mp4" aria-label="A real SO-101 run with the context: both blocks go into the cabinet"></video></div><h3>With the context</h3><p>The agent reads the context and runs the task on a new real layout: both blocks in. Pauses cut, 4× speed.</p></div>
+    <div class="node" id="nWithout"><div class="slot"><video class="vslot" muted loop playsinline preload="none" poster="assets/r2s2r/without-context.jpg" data-src="assets/r2s2r/without-context.mp4" aria-label="A real SO-101 run without the context: no block goes in"></video></div><h3>Without the context</h3><p>The same agent on a new real layout, without the context: no block goes in. Pauses cut, 4× speed.</p></div>
+    <svg class="links" id="links" aria-hidden="true"></svg>
   </div>
+  <div class="scores">
+    <p class="scores-h">Success on 10 unseen layouts in the twin</p>
+    <table><thead><tr><th></th><th><a href="notes.html#blocks">Put the blocks in the container</a><span class="def">Success: at the end, the twin's own check finds both blocks inside the container.</span></th><th><a href="notes.html#drawer">Pull out the drawer</a><span class="def">Success: the drawer ends at least 5.5 cm out, its travel measured in the twin.</span></th></tr></thead>
+      <tbody><tr><th>ORA (baseline)</th><td><a href="notes.html#blocks">8/10</a></td><td><a href="notes.html#drawer">7/10</a></td></tr>
+        <tr class="best"><th>+ demonstration context</th><td><a href="notes.html#blocks">10/10</a></td><td><a href="notes.html#drawer">9/10</a></td></tr></tbody></table>
+    <p class="scores-more"><a href="notes.html">Watch every layout, without and with the context &rarr;</a></p>
+  </div>
+  <h3 class="sub">On the real robot</h3>
+  <p class="sub-lede">The same task on the real SO-101 arm with a new layout, once with the context and once without; blue and orange blocks stand in for the green and red ones. One run each, so these are demonstrations, not success rates. Pauses are cut and the videos run at 4× speed.</p>
+  <div class="real2">
+    <figure><div class="vbox"><video muted loop playsinline preload="none" poster="assets/r2s2r/with-context.jpg" data-src="assets/r2s2r/with-context.mp4" aria-label="The real run with the context"></video><span class="badge ok">&#10003; Success</span></div>
+      <figcaption><b>With the context</b>Both blocks are picked up and dropped through the opening: the blue one, then the orange one. 54 model calls, 26 min.</figcaption></figure>
+    <figure class="fail"><div class="vbox"><video muted loop playsinline preload="none" poster="assets/r2s2r/without-context.jpg" data-src="assets/r2s2r/without-context.mp4" aria-label="The real run without the context"></video><span class="badge no">&#10005; No block in</span></div>
+      <figcaption><b>Without the context</b>It reaches for the blue block again and again and sets it back on the table, and never holds the orange one. No block goes in; the run was stopped after 47 model calls, 21.5 min.</figcaption></figure>
+  </div>
+</div></section>
+
+<section class="block" id="limits"><div class="wrap">
+  <h2 class="h">Limitations</h2>
+  <p class="lede">Our twins cover rigid objects and simple articulated objects, such as drawers. Soft bodies, such as towels and napkins, and complex articulated objects are left for future work.</p>
 </div></section>
 
 <dialog class="pop" id="pop" aria-labelledby="popTitle">
@@ -243,19 +278,14 @@
 <footer><div class="wrap">Zhaoning Wang, Siyi Chen, Jun Gao. University of Michigan.</div></footer>
 
 
+<script src="assets/gallery/gallery.js"></script>
 <script>
 // --- shared: clips, seams, what is on screen ---
-const CLIPS = 'assets/clips/';
-const SCENES = [
-  ['12', 'Marker into a purple box', 'IPRL'], ['22', 'Toy grapes into a bowl', 'RAIL'], ['19', 'Silver flask to the right', 'RAD', 'medium'],
-  ['18', 'Toy fry into a carton', 'PennPAL'], ['39', 'Wooden block into a cup', 'TRI'], ['11', 'Marker into a white mug', 'IPRL'],
-  ['05', 'White spoon into a mug', 'CLVR'], ['16', 'Marker into a clear cup', 'IRIS'], ['01', 'Green block into a black bowl', 'AUTOLab'],
-  ['13', 'Press a light switch', 'IPRL', 'medium'],
-];
+const GALLERY = window.GALLERY || [];     // the owner's picks in display order (assets/gallery/gallery.js, build_gallery.py)
 const STILL = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const videos = {};
-const vid = (name) => videos[name] || (videos[name] = Object.assign(document.createElement('video'),
-  { src: `${CLIPS}${name}.mp4`, muted: true, loop: true, playsInline: true, autoplay: true, crossOrigin: 'anonymous', preload: 'auto' }));
+const vid = (src) => videos[src] || (videos[src] = Object.assign(document.createElement('video'),
+  { src, muted: true, loop: true, playsInline: true, crossOrigin: 'anonymous', preload: 'auto' }));
 window.__vid = vid;
 const fit = (c) => { const r = c.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2), w = Math.round(r.width * d);
   if (w && c.width !== w) { c.width = w; c.height = Math.round(w * 342 / 640); } return d; };
@@ -274,7 +304,7 @@ function seam(c, v, x, d, knob) {             // real (the clip's left half) lef
 window.__seam = seam;
 const onScreen = {};
 const io = new IntersectionObserver((es) => es.forEach((e) => { onScreen[e.target.id] = e.isIntersecting; }), { rootMargin: '120px' });
-['top', 'real-to-sim', 'how', 'icl', 'real', 'sim2real'].forEach((id) => io.observe(document.getElementById(id)));
+['top', 'real-to-sim', 'how', 'sim2real'].forEach((id) => io.observe(document.getElementById(id)));
 
 // --- the bar after the opening, and which section is here ---
 const barTop = document.getElementById('barTop');
@@ -282,23 +312,45 @@ new IntersectionObserver(([e]) => barTop.classList.toggle('on', !e.isIntersectin
 const links = [...barTop.querySelectorAll('.nav a')];
 const here = new IntersectionObserver((es) => es.forEach((e) => {          // the section across the middle of the screen
   if (e.isIntersecting) links.forEach((a) => a.classList.toggle('here', a.getAttribute('href') === `#${e.target.id}`)); }), { rootMargin: '-45% 0px -50% 0px' });
-['real-to-sim', 'how', 'icl', 'real', 'sim2real'].forEach((id) => here.observe(document.getElementById(id)));
+['real-to-sim', 'how', 'sim2real'].forEach((id) => here.observe(document.getElementById(id)));
+
+// --- the real-to-sim-to-real arrows: demonstration → twin → context → with, and twin → without (skipping the context) ---
+const branch = document.getElementById('branch'), arrows = document.getElementById('links');
+function drawLinks() {
+  if (getComputedStyle(arrows).display === 'none') return;
+  const o = branch.getBoundingClientRect();
+  const at = (id) => { const b = document.querySelector(`#${id} .slot`).getBoundingClientRect();
+    return { l: b.left - o.left, r: b.right - o.left, m: (b.top + b.bottom) / 2 - o.top }; };
+  const D = at('nDemo'), T = at('nTwin'), C = at('nCtx'), W = at('nWith'), N = at('nWithout'), g = 7, x = (T.r + C.l) / 2, k = 12;
+  arrows.setAttribute('viewBox', `0 0 ${o.width} ${o.height}`);
+  arrows.innerHTML = `<defs>${['grey', 'green'].map((c) => `<marker id="ah-${c}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 1 L9 5 L0 9" fill="none" stroke="${c === 'green' ? '#5FAE86' : '#8C949E'}" stroke-width="1.8"/></marker>`).join('')}</defs>
+    <path d="M${D.r + g} ${D.m} H${T.l - g}" marker-end="url(#ah-grey)"/>
+    <path d="M${T.r + g} ${T.m} H${x}"/><path class="ctx" d="M${x} ${T.m} H${C.l - g}" marker-end="url(#ah-green)"/>
+    <path class="ctx" d="M${C.r + g} ${C.m} H${W.l - g}" marker-end="url(#ah-green)"/>
+    <path d="M${x} ${T.m} V${N.m - k} Q${x} ${N.m} ${x + k} ${N.m} H${N.l - g}" marker-end="url(#ah-grey)"/>
+    <text x="${(x + N.l) / 2}" y="${N.m - 9}" text-anchor="middle">skips the context</text>`;
+}
+new ResizeObserver(drawLinks).observe(branch);
+const lazyVids = new IntersectionObserver((es) => es.forEach(({ target: v, isIntersecting }) => {   // play only on screen
+  if (isIntersecting) { if (!v.src) v.src = v.dataset.src; v.play().catch(() => {}); } else v.pause(); }), { rootMargin: '120px' });
+document.querySelectorAll('#sim2real video[data-src]').forEach((v) => lazyVids.observe(v));
+document.fonts?.ready.then(drawLinks);
 
 // --- the opening mosaic ---
-const IDS = SCENES.map((x) => x[0]), mosaic = document.getElementById('mosaic'), mos = [];
-for (let i = 0; i < 25; i++) { const c = document.createElement('canvas'); c.width = 640; c.height = 342; mosaic.append(c); mos.push({ c, clip: `s${IDS[(i * 3) % IDS.length]}`, i }); }
+const MOSAIC = GALLERY.slice(0, 13), mosaic = document.getElementById('mosaic'), mos = [];   // the gallery's first tiles
+for (let i = 0; i < 25 && MOSAIC.length; i++) { const c = document.createElement('canvas'); c.width = 640; c.height = 342; mosaic.append(c);
+  mos.push({ c, clip: MOSAIC[(i * 3) % MOSAIC.length].tile, i }); }
 
 // --- the real-to-sim gallery: two rows that scroll sideways; a click opens the scene's full videos ---
-const FULL = 'assets/full/';
-const DEMOS = SCENES.map(([id, task, lab, level]) => ({ key: `s${id}`, clip: `s${id}`, task, where: `DROID, recorded at ${lab}`, level }));
-DEMOS.splice(1, 0, { key: 'so101', clip: 'so101-blocks', task: 'Two blocks to a container', where: 'SO-101, our recording', level: 'medium', note: '2× speed' });
+const DEMOS = GALLERY.map((g) => ({ ...g, clip: g.tile, task: g.title, note: g.tile_speed > 1 ? `${g.tile_speed}× speed` : '' }));
 const strip = document.getElementById('strip'), count = document.getElementById('count'), thumb = document.getElementById('thumb');
 const prevB = document.getElementById('prev'), nextB = document.getElementById('next'), tiles = [];
 const clamp01 = (u) => Math.min(1, Math.max(0, u));
 DEMOS.forEach((demo, i) => {
   const b = document.createElement('button'); b.type = 'button'; b.className = 'tile';
   b.innerHTML = `<div class="f"><canvas></canvas><span class="open">Full videos</span></div><p class="t">${demo.task}</p>
-    <p class="w">${demo.where}${demo.level === 'medium' ? '<em>medium</em>' : ''}${demo.note ? `<em>${demo.note}</em>` : ''}</p>`;
+    <p class="w">${demo.where}${demo.accepted && (demo.level === 'medium' || demo.level === 'hard') ? `<em>${demo.level}</em>` : ''}${demo.note ? `<em>${demo.note}</em>` : ''}</p>`;
   strip.append(b);
   const tile = { b, c: b.querySelector('canvas'), f: b.querySelector('.f'), demo, i, hover: null, seen: true };
   tile.f.addEventListener('pointermove', (e) => { if (drag?.moved) return; const r = tile.f.getBoundingClientRect(); tile.hover = clamp01((e.clientX - r.left) / r.width); });
@@ -335,8 +387,8 @@ const popPlay = document.getElementById('popPlay'), popSeek = document.getElemen
 const mmss = (x) => (Number.isFinite(x) ? `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, '0')}` : '0:00');
 function openScene(demo) {
   document.getElementById('popTitle').textContent = demo.task;
-  document.getElementById('popMeta').textContent = `${demo.where} · accepted at ${demo.level || 'simple'} · the full replay at its real speed`;
-  pv[0].src = `${FULL}${demo.key}-ext.mp4`; pv[1].src = `${FULL}${demo.key}-wrist.mp4`;
+  document.getElementById('popMeta').textContent = `${demo.where}${demo.accepted ? ` · accepted at ${demo.level}` : ''} · the full replay at its real speed`;
+  pv[0].src = demo.ext; pv[1].src = demo.wrist;
   pv.forEach((v) => v.play().catch(() => {})); popPlay.textContent = 'Pause';
   pop.showModal();
 }
@@ -355,18 +407,19 @@ function popSync() {                              // the wrist video follows the
 const t0 = performance.now();
 function loop(now) {
   const t = (now - t0) / 1000;
-  if (onScreen.top) mos.forEach(({ c, clip, i }) => { const v = vid(clip); if (v.readyState < 2) return; const d = fit(c);
+  const need = new Set();                    // the clips that a mosaic cell or tile on screen shows: only they play
+  if (onScreen.top) mos.forEach(({ c, clip, i }) => { need.add(clip); const v = vid(clip); if (v.readyState < 2) return; const d = fit(c);
     seam(c, v, STILL ? 0.5 : 0.5 + 0.38 * Math.sin(t * 0.6 - (i % 5) * 0.55 - Math.floor(i / 5) * 0.85), d, false); });
-  if (onScreen['real-to-sim'] && !pop.open) tiles.forEach((tile) => { if (!tile.seen) return; const v = vid(tile.demo.clip); if (v.readyState < 2) return;
+  if (onScreen['real-to-sim'] && !pop.open) tiles.forEach((tile) => { if (!tile.seen) return; need.add(tile.demo.clip); const v = vid(tile.demo.clip); if (v.readyState < 2) return;
     const d = fitBox(tile.c), col = Math.floor(tile.i / 2), row = tile.i % 2;
     seam(tile.c, v, tile.hover ?? (STILL ? 0.5 : 0.5 + 0.38 * Math.sin(t * 0.6 - col * 0.55 - row * 0.85)), d, false); });
   if (pop.open) popSync();
+  for (const [src, v] of Object.entries(videos)) {
+    if (need.has(src)) { if (v.paused && !(now - (v.asked || 0) < 1000)) { v.asked = now; v.play().catch(() => {}); } } else if (!v.paused) v.pause(); }
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
-const playAll = () => Object.values(videos).forEach((v) => { if (v.paused && !document.hidden) v.play().catch(() => {}); });
-setInterval(playAll, 1500);
-document.addEventListener('visibilitychange', () => { if (document.hidden) Object.values(videos).forEach((v) => v.pause()); else playAll(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden) Object.values(videos).forEach((v) => v.pause()); });
 </script>
 
 <script type="module">
@@ -381,16 +434,24 @@ const STILL = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SPEED = 1.25;                 // the steps and their animations run 1.25 times faster than the durations below
 const STEPS = [
   { name: 'Record', dur: 8, chips: ['Video', 'Depth', 'Robot actions'], txt: 'It starts from one demonstration: video from the robot\'s cameras, depth, and the actions the robot recorded. Depth turns the frames into this cloud of points.' },
-  { name: 'Align', dur: 7, chips: ['Camera poses', 'Robot pose'], txt: 'The cameras and the robot are placed in one frame. Each camera looks at the scene from where it stood, and its first frame hangs in front of it.' },
+  { name: 'Align', dur: 20, chips: ['Robot arm as target', 'SAM3', 'GPT-6 review'], txt: 'The robot arm is the calibration target: each camera, fixed or on the wrist, moves until the arm drawn in its view (green) lies on the real arm (white).',
+    fig: `<figure class="armfig"><div class="armv">
+      <div class="armset on" id="armExt"><img src="assets/align/s22/base.jpg" alt="The exterior camera's frame of the grapes scene, with the arm outlined">
+        <img src="assets/align/s22/white.png" alt=""><img class="red" src="assets/align/s22/red.png" alt=""><img class="green" src="assets/align/s22/green.png" alt=""></div>
+      <div class="armset" id="armWrist"><img src="assets/align/s22w/base.jpg" alt="The wrist camera's frame of the grapes scene, with the gripper outlined">
+        <img src="assets/align/s22w/white.png" alt=""><img class="red" src="assets/align/s22w/red.png" alt=""><img class="green" src="assets/align/s22w/green.png" alt=""></div>
+      <span class="armtag" id="armTag">Exterior camera</span></div>
+      <p class="armstate" id="armState"></p>
+      <p class="armkeys"><span class="key w">The real arm</span><span class="key r">Recorded camera pose</span><span class="key g">Fitted camera pose</span></p></figure>` },
   { name: 'Measure', dur: 8, chips: ['SAM3', 'Depth'], txt: 'SAM3 segments each object in the video. Depth lifts the segment into 3D, and a box is measured around it.' },
   { name: 'Reconstruct', dur: 8, chips: ['GPT-6', 'Blender'], txt: 'GPT-6 designs a mesh for each object in Blender, sized to its measured box. The table becomes a support mesh.' },
   { name: 'Check', dur: 6, chips: ['GPT-6'], txt: 'Each designed object is outlined on the real frames. GPT-6 compares outline and object, and asks for fixes.' },
   { name: 'Replay', dur: 10, chips: ['Isaac Sim'], txt: 'The recorded actions drive the robot in Isaac Sim. The grapes move only by contact: grasped, carried and dropped into the bowl.' },
-  { name: 'Judge', dur: 8, chips: ['GPT-6'], txt: 'GPT-6 compares the replay with the video. Where they disagree, the agent repairs the scene and replays it, until they match.' },
+  { name: 'Judge', dur: 13.5, chips: ['GPT-6'], txt: 'GPT-6 compares the replay with the video. Where they disagree, the agent repairs the scene and replays it, until they match.' },
 ];
 const texts = document.getElementById('stepTexts'), bar = document.getElementById('steps'), vis = document.getElementById('vis');
 STEPS.forEach((s, i) => {
-  texts.insertAdjacentHTML('beforeend', `<div class="step" data-i="${i}"><p class="n">Step ${i + 1} of ${STEPS.length}</p><p class="title">${s.name}</p><p class="txt">${s.txt}</p><div class="chips">${s.chips.map((c) => `<span>${c}</span>`).join('')}</div></div>`);
+  texts.insertAdjacentHTML('beforeend', `<div class="step" data-i="${i}"><p class="n">Step ${i + 1} of ${STEPS.length}</p><p class="title">${s.name}</p><p class="txt">${s.txt}</p><div class="chips">${s.chips.map((c) => `<span>${c}</span>`).join('')}</div>${s.fig || ''}</div>`);
   const b = document.createElement('button'); b.type = 'button'; b.innerHTML = `<i></i>${s.name}`; b.addEventListener('click', () => go(i)); bar.append(b);
 });
 
@@ -438,7 +499,7 @@ async function load() {
   D.cloud = new THREE.Points(cg, new THREE.PointsMaterial({ size: 0.007, vertexColors: true, transparent: true })); D.cloudN = n; G.cloud.add(D.cloud);
   const tl = new THREE.TextureLoader(); tl.setCrossOrigin('anonymous');
   D.frusta = Object.entries(cams).map(([id, c]) => {
-    const T = new THREE.Matrix4().set(...c.T.flat()), K = c.K, [W, H] = c.size, dd = 0.22;
+    const T = new THREE.Matrix4().set(...c.T.flat()), K = c.K, [W, H] = c.size, dd = c.depth || 0.22;
     const corner = (u, v) => new THREE.Vector3((u - K[0][2]) / K[0][0] * dd, (v - K[1][2]) / K[1][1] * dd, dd);
     const cs = [corner(0, 0), corner(W, 0), corner(W, H), corner(0, H)], o = new THREE.Vector3();
     const lines = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([o, cs[0], o, cs[1], o, cs[2], o, cs[3], cs[0], cs[1], cs[1], cs[2], cs[2], cs[3], cs[3], cs[0]]),
@@ -447,8 +508,10 @@ async function load() {
     quad.setAttribute('uv', new THREE.BufferAttribute(new Float32Array([0, 1, 1, 1, 1, 0, 0, 0]), 2)); quad.setIndex([0, 1, 2, 0, 2, 3]);
     const tex = tl.load(BASE + c.image); tex.colorSpace = THREE.SRGBColorSpace;
     const plane = new THREE.Mesh(quad, new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, transparent: true }));
-    const g = new THREE.Group(); g.matrixAutoUpdate = false; g.add(lines, plane); G.frusta.add(g); return { g, T };
+    const g = new THREE.Group(); g.matrixAutoUpdate = false; g.add(lines, plane); G.frusta.add(g); return { g, T, wrist: id.startsWith('wrist') };
   });
+  const wrist = D.frusta.find((f) => f.wrist);                  // the Align step's second half looks at the wrist camera from near by
+  if (wrist) { const p = new THREE.Vector3().setFromMatrixPosition(wrist.T); VIEWS.wrist = [[p.x + 0.75, p.y - 0.85, p.z + 0.35], [p.x, p.y, p.z - 0.12]]; }
   const pt = taker(sceneMeta.points, pointsBuf);
   D.segments = Object.keys(sceneMeta.points).map((id) => { const g = new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(pt(id), 3));
     const p = new THREE.Points(g, new THREE.PointsMaterial({ color: COLOURS[id] || 0xe0663d, size: 0.011, transparent: true })); G.segments.add(p); return p; });
@@ -475,8 +538,9 @@ const ease = (u) => u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2, c
 function flyTo(pos, target, dur = 1.4) { if (userTook) return; fly = { p0: camera.position.clone(), t0: controls.target.clone(), p1: new THREE.Vector3(...pos), t1: new THREE.Vector3(...target), start: performance.now(), dur }; }
 const VIEWS = { wide: [[2.05, -1.75, 1.4], [0.4, -0.05, 0.3]], cams: [[2.3, -0.35, 1.6], [0.45, -0.05, 0.2]], table: [[1.12, -0.82, 0.62], [0.6, -0.14, 0.03]], replay: [[1.45, -1.1, 0.85], [0.52, -0.1, 0.15]] };
 
-let cur = -1, started = 0, elapsed = 0, last = 0, userPaused = false, begun = false, pipeShown = false;
-new IntersectionObserver((es) => { pipeShown = es[es.length - 1].intersectionRatio >= 0.5; }, { threshold: [0, 0.5, 1] }).observe(vis);   // half the 3D panel in view
+let cur = -1, started = 0, elapsed = 0, last = 0, userPaused = false, begun = false, alignHalf = 0;
+const howSec = document.getElementById('how');
+const inView = () => { const r = howSec.getBoundingClientRect(); return r.top < innerHeight * 2 / 3 && r.bottom > innerHeight / 3; };   // the section fills a third of the screen or more
 const show = (k, on) => { G[k].visible = on; };
 function enter(i) {
   const s = STEPS[i].name;
@@ -486,18 +550,30 @@ function enter(i) {
   document.getElementById('legend3').classList.toggle('on', s === 'Measure' || s === 'Reconstruct');
   Object.keys(G).forEach((k) => show(k, false));
   if (s === 'Record') { show('cloud', true); show('robot', true); flyTo(...VIEWS.wide); }
-  if (s === 'Align') { show('cloud', true); show('robot', true); show('frusta', true); poseRobot(0); flyTo(...VIEWS.cams); }
+  if (s === 'Align') { show('cloud', true); show('robot', true); show('frusta', true); poseRobot(0); alignHalf = 0; flyTo(...VIEWS.cams); }
   if (s === 'Measure') { show('cloud', true); show('segments', true); show('boxes', true); flyTo(...VIEWS.table); }
   if (s === 'Reconstruct') { show('cloud', true); show('segments', true); show('boxes', true); show('meshes', true); flyTo(...VIEWS.table); }
   if (s === 'Check' || s === 'Judge') { show('meshes', true); show('robot', true); poseRobot(0); }
+  if (s === 'Judge') { judgeVid.currentTime = 0; judgeVid.play().catch(() => {}); } else judgeVid.pause();   // the replay from its start
   if (s === 'Replay') { show('robot', true); show('sim', true); flyTo(...VIEWS.replay); }
 }
 function animate(i, t) {
   const s = STEPS[i].name, r = D.robot;
   if (s === 'Record') { D.cloud.geometry.setDrawRange(0, Math.floor(D.cloudN * clamp01(STILL ? 1 : t / 2.6))); D.cloud.material.opacity = 1; poseRobot(STILL ? 0 : ((t * 30) % (r.steps + 25))); }
   if (s === 'Align') { D.cloud.geometry.setDrawRange(0, D.cloudN); D.cloud.material.opacity = 0.55;
-    D.frusta.forEach((f, k) => { const u = ease(clamp01(STILL ? 1 : (t - 0.3 - k * 0.5) / 1.6)); f.g.matrix.copy(f.T.clone().multiply(new THREE.Matrix4().makeTranslation(0, 0, -0.9 * (1 - u))));
-      f.g.children.forEach((c) => { c.material.opacity = u; }); }); }
+    const half = t < FIT_HALF ? 0 : 1;                       // the fixed cameras first, then the wrist camera
+    if (half !== alignHalf) { alignHalf = half; flyTo(...(half ? VIEWS.wrist || VIEWS.cams : VIEWS.cams)); }
+    const o = STILL ? 0 : search(t, FIT_AT[half]), settled = (k) => (STILL ? 1 : 1 - Math.exp(-Math.max(0, t - FIT_AT[k]) / FIT_TAU));
+    D.frusta.forEach((f, j) => { const k = f.wrist ? 1 : 0, off = k === half ? o : (k < half ? 0 : 1);   // fly in, then search up and down
+      const u = ease(clamp01(STILL ? 1 : (t - (f.wrist ? FIT_HALF + 0.3 : 0.3 + j * 0.5)) / 1.6));
+      f.g.matrix.copy(f.T.clone().multiply(new THREE.Matrix4().makeTranslation(0, -FIT_UP_M * off, -0.9 * (1 - u))));    // -y is up (OpenCV axes)
+      f.g.children.forEach((c) => { c.material.opacity = u; });
+      f.g.children[0].material.color.copy(FIT_RED).lerp(FIT_GREEN, settled(k)); });
+    armSets.forEach((set, k) => set.classList.toggle('on', k === half));
+    armGreens[half].style.transform = `translateY(${(FIT_IMG * o).toFixed(2)}%)`;   // the camera moves up, so the drawn arm moves down
+    armTag.textContent = half ? 'Wrist camera' : 'Exterior camera';
+    armState.textContent = settled(half) > 0.95 ? 'Fitted: the drawn arm (green) lies on the real arm (white).'
+      : 'Searching: as the camera moves, the arm drawn in its view (green) moves with it. Illustration: the motion is exaggerated.'; }
   if (s === 'Measure') { D.cloud.geometry.setDrawRange(0, D.cloudN); D.cloud.material.opacity = 0.2;
     D.segments.forEach((p, k) => { const u = ease(clamp01(STILL ? 1 : (t - 0.4 - k * 0.5) / 1.2)); p.material.opacity = u; p.position.z = 0.06 * (1 - u); });
     D.boxes.forEach((b, k) => { const u = ease(clamp01(STILL ? 1 : (t - 2.4 - k * 0.5) / 1.2)); b.scale.setScalar(Math.max(0.001, u)); b.children[0].material.opacity = u; b.children[1].material.opacity = 0.1 * u; }); }
@@ -516,18 +592,32 @@ pp.addEventListener('click', () => { userPaused = !userPaused; pp.textContent = 
   ctlNote.textContent = userPaused ? 'Paused. Play to go on, or click a step.' : 'The steps play on their own.'; });
 
 const seamJ = document.getElementById('seamJ');
+// the Judge step plays its own copy of the replay clip, from the start, and lasts at least as long as the clip
+const judgeVid = Object.assign(document.createElement('video'), { src: 'assets/clips/s22.mp4', muted: true, playsInline: true, preload: 'auto' });
+const JUDGE = STEPS.findIndex((x) => x.name === 'Judge');
+judgeVid.addEventListener('loadedmetadata', () => { STEPS[JUDGE].dur = Math.max(STEPS[JUDGE].dur, judgeVid.duration * SPEED + 1); });
+const armSets = [document.getElementById('armExt'), document.getElementById('armWrist')], armGreens = armSets.map((x) => x.querySelector('.green'));
+const armTag = document.getElementById('armTag'), armState = document.getElementById('armState');
+// the Align step's search, an illustration: a camera starts at the recorded pose (offset 1), swings up and down and settles (0);
+// the fixed cameras in the first half of the step, the wrist camera in the second
+const FIT_HALF = 10, FIT_AT = [2.6, 11.4], FIT_TAU = 1.6, FIT_PERIOD = 1.3;   // step seconds: the second half, each search's start, its fade, one swing
+const FIT_UP_M = 0.07, FIT_IMG = 7;                           // the swing in 3D (m) and in the picture (% of its height; .armv .red)
+const FIT_RED = new THREE.Color('#ff2828'), FIT_GREEN = new THREE.Color('#3cff3c');
+const search = (t, at) => (t < at ? 1 : Math.exp(-(t - at) / FIT_TAU) * Math.cos(2 * Math.PI * (t - at) / FIT_PERIOD));
 function resize() { const w = vis.clientWidth, h = vis.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
 new ResizeObserver(resize).observe(vis); resize();
 camera.position.set(...VIEWS.wide[0]); controls.target.set(...VIEWS.wide[1]); controls.update();
 load().then(() => renderer.setAnimationLoop(tick)).catch((e) => vis.insertAdjacentHTML('beforeend', `<p class="pill" style="left:10px;top:10px">The 3D data did not load (${e.message})</p>`));
 function tick(now) {
-  const here = pipeShown;
-  if (here && !begun) { begun = true; go(0); }          // step 1 starts when the reader first reaches the 3D panel
+  const here = inView();
+  if (here && !begun) { begun = true; go(0); }          // step 1 starts when the section has come two-thirds of the way up the screen
   if (!begun) { last = now; return; }
   const t = (now - started) / 1000 * SPEED;
   if (fly) { const u = ease(clamp01((now - fly.start) / 1000 / fly.dur)); camera.position.lerpVectors(fly.p0, fly.p1, u); controls.target.lerpVectors(fly.t0, fly.t1, u); if (u >= 1) fly = null; }
   animate(cur, t);
-  if (STEPS[cur].name === 'Judge') { const v = window.__vid('s22'); if (v.readyState >= 2) { const d = Math.min(devicePixelRatio || 1, 2), w = Math.round(seamJ.getBoundingClientRect().width * d);
+  if (STEPS[cur].name === 'Judge') { const run = here && !userPaused && !holding && now >= holdUntil, v = judgeVid;   // the clip waits with the step
+    if (run && v.paused && !v.ended) v.play().catch(() => {}); if (!run && !v.paused) v.pause();
+    if (v.readyState >= 2) { const d = Math.min(devicePixelRatio || 1, 2), w = Math.round(seamJ.getBoundingClientRect().width * d);
     if (w && seamJ.width !== w) { seamJ.width = w; seamJ.height = Math.round(w * 342 / 640); } window.__seam(seamJ, v, STILL ? 0.5 : 0.5 + 0.36 * Math.sin(now / 1000 * 0.6), d, false); } }
   const dt = last ? Math.min(0.1, (now - last) / 1000) : 0;
   if (here && !userPaused && !holding && now >= holdUntil) elapsed += dt * SPEED;     // off screen, the step waits

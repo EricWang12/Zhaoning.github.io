@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demonstration Context Videos</title>
+<meta name="description" content="You Only Teach Once: the robot agent on the same unseen layouts of the twin, without and with the demonstration context.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&display=swap" rel="stylesheet">
+<style>
+  :root { --page:#121417; --panel:#1B1E23; --ink:#ECEEF1; --soft:#C9CED5; --muted:#8C949E; --rule:#2A2F36; }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } }
+  body { margin:0; background:var(--page); color:var(--ink); font-family:'Archivo',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; }
+  .wrap { max-width:1200px; margin:0 auto; padding:0 32px; }
+  .bar { position:sticky; top:0; z-index:10; display:flex; align-items:center; gap:18px; padding:10px 24px; background:rgba(18,20,23,.88); backdrop-filter:blur(8px); border-bottom:1px solid var(--rule); }
+  .bar .back { font-stretch:118%; font-weight:760; font-size:15px; text-decoration:none; white-space:nowrap; }
+  .bar nav { display:flex; gap:8px; flex-wrap:wrap; }
+  .bar nav a { font-size:12.5px; font-weight:600; padding:5px 12px; border-radius:20px; border:1px solid rgba(236,238,241,.28); text-decoration:none; white-space:nowrap; }
+  .bar nav a:hover { background:rgba(236,238,241,.12); }
+  header.top { padding:56px 0 10px; }
+  h1 { font-stretch:122%; font-weight:780; font-size:clamp(30px, 3.6vw, 44px); letter-spacing:-0.02em; line-height:1.08; margin:0 0 12px; }
+  .lede { color:var(--soft); font-size:17px; line-height:1.55; max-width:70ch; margin:0 0 8px; }
+  .small { color:var(--muted); font-size:13.5px; margin:0; }
+  section.task { padding:46px 0 10px; scroll-margin-top:60px; }
+  section.task h2 { font-stretch:118%; font-weight:760; font-size:28px; letter-spacing:-0.015em; margin:0 0 6px; }
+  .metric { color:var(--muted); font-size:14px; margin:0 0 18px; }
+  .cols, .pair { display:grid; grid-template-columns:64px minmax(0,1fr) minmax(0,1fr); gap:14px 18px; align-items:start; }
+  .cols { position:sticky; top:49px; z-index:5; background:var(--page); padding:10px 0; border-bottom:1px solid var(--rule); margin-bottom:14px; }
+  .cols span { font-size:14px; font-weight:650; } .cols span:first-child { color:var(--muted); font-weight:500; }
+  .pair { margin-bottom:22px; }
+  .lay { font-size:14px; color:var(--muted); font-variant-numeric:tabular-nums; padding-top:6px; }
+  figure { margin:0; }
+  figure video { width:100%; display:block; aspect-ratio:16/9; object-fit:cover; border-radius:6px; background:var(--panel); }
+  figcaption { display:flex; flex-wrap:wrap; gap:4px 10px; align-items:center; font-size:13px; color:var(--muted); margin-top:7px; }
+  .tag { font-size:12px; font-weight:650; padding:1px 8px; border-radius:10px; border:1px solid var(--rule); color:var(--ink); }
+  .tag.no { color:#FF8A80; border-color:#5A2E2E; }
+  .vbox { position:relative; }
+  .badge { position:absolute; left:8px; top:8px; font-size:12.5px; font-weight:700; padding:3px 10px; border-radius:12px; pointer-events:none; }
+  .badge.ok { background:rgba(27,94,32,.82); color:#E8F5E9; } .badge.no { background:#D32F2F; color:#fff; box-shadow:0 2px 10px rgba(0,0,0,.4); }
+  figure.fail video { outline:3px solid #E53935; outline-offset:-3px; }
+  figure.fail figcaption { color:#FFB4AB; }
+  .missing { aspect-ratio:16/9; border-radius:6px; border:1px dashed #3A4049; display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px; }
+  footer { border-top:1px solid var(--rule); margin-top:60px; padding:28px 0 40px; font-size:13.5px; color:var(--muted); }
+  @media (max-width: 700px) { .cols, .pair { grid-template-columns:minmax(0,1fr) minmax(0,1fr); } .cols span:first-child, .lay { display:none; } .bar nav { display:none; } }
+</style>
+</head>
+<body>
+<div class="bar"><a class="back" href="index.html#sim2real">&larr; You Only Teach Once</a><nav><a href="#blocks">Two blocks to a container</a><a href="#drawer">Open the drawer</a></nav></div>
+<div class="wrap">
+  <header class="top">
+    <h1>Without and with the demonstration context</h1>
+    <p class="lede">The robot agent (ORA) runs each task on the same unseen layouts of the twin, once without the demonstration context and once with it. Each row is one layout: without the context on the left, with it on the right.</p>
+    <p class="small">The videos are the twin's scene camera, sped up; each caption gives the outcome and the agent's own run time.</p>
+  </header>
+  <div id="tasks"></div>
+</div>
+<footer><div class="wrap">Zhaoning Wang, Siyi Chen, Jun Gao. University of Michigan.</div></footer>
+
+<script>
+// Which experiments each task shows, in this order; the manifest (assets/notes/manifest.json) holds every episode found.
+const SHOW = {
+  blocks: { title: 'Two blocks to a container', experiments: ['note-vs-bare-deepseek5', 'note-vs-bare-deepseek5b'],
+            metric: 'Success: at the end, the twin\'s own check finds both blocks inside the container.' },
+  drawer: { title: 'Open the drawer', experiments: ['note-vs-bare-side3b-deepseek', 'note-vs-bare-side3-deepseek'],
+            metric: 'Success: the drawer ends at least 5.5 cm out, its travel measured in the twin.' },
+};
+const esc = (x) => String(x ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+function cell(e) {
+  if (!e || !e.video) return '<div class="missing">No video</div>';
+  const travel = e.travel_cm != null ? `<span>${Number(e.travel_cm).toFixed(2)} cm</span>` : '';
+  const badge = e.ok ? '<span class="badge ok">&#10003;</span>' : `<span class="badge no">&#10005; ${esc(e.outcome[0].toUpperCase() + e.outcome.slice(1))}</span>`;
+  return `<figure${e.ok ? '' : ' class="fail"'}><div class="vbox"><video muted loop playsinline preload="none" poster="${esc(e.poster)}" data-src="${esc(e.video)}"></video>${badge}</div>
+    <figcaption><span class="tag${e.ok ? '' : ' no'}">${esc(e.outcome)}</span>${travel}<span>${esc(e.minutes)} min</span><span>shown ×${esc(e.speed)}</span></figcaption></figure>`;
+}
+fetch('assets/notes/manifest.json').then((r) => r.json()).then((m) => {
+  const root = document.getElementById('tasks');
+  for (const [key, show] of Object.entries(SHOW)) {
+    const task = (m.tasks || []).find((x) => x.key === key);
+    if (!task) continue;
+    const rows = {};
+    task.episodes.filter((e) => show.experiments.includes(e.experiment)).forEach((e) => {
+      const id = `${show.experiments.indexOf(e.experiment)}-${e.layout}`;
+      (rows[id] = rows[id] || { layout: e.layout })[e.arm] = e; });
+    const order = Object.keys(rows).sort();
+    root.insertAdjacentHTML('beforeend', `<section class="task" id="${key}"><h2>${esc(show.title)}</h2><p class="metric">${esc(show.metric)}</p>
+      <div class="cols"><span>Layout</span><span>ORA (baseline)</span><span>+ demonstration context</span></div>
+      ${order.map((id) => `<div class="pair"><div class="lay">${esc(rows[id].layout)}</div>${cell(rows[id].without)}${cell(rows[id].with)}</div>`).join('')}</section>`);
+  }
+  // a video loads and plays only while it is on screen
+  const io = new IntersectionObserver((es) => es.forEach(({ target: v, isIntersecting }) => {
+    if (isIntersecting) { if (!v.src) v.src = v.dataset.src; v.play().catch(() => {}); } else v.pause(); }), { rootMargin: '100px' });
+  document.querySelectorAll('video[data-src]').forEach((v) => io.observe(v));
+  if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+}).catch((e) => { document.getElementById('tasks').innerHTML = `<p class="small">The videos did not load (${esc(e.message)}).</p>`; });
+</script>
+</body>
+</html>
