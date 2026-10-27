@@ -239,8 +239,8 @@
       <dl><dt>Grasp</dt><dd>3.1 cm above its bottom</dd><dt>Lift</dt><dd>straight up 7.0 cm</dd><dt>Release</dt><dd>1.3 cm above the opening</dd></dl>
       <span>+ the person's sequence as tool calls</span></div>
       <h3>Demonstration context</h3><p>Measured in the twin: what the agent reads, not new weights.</p></div>
-    <div class="node" id="nWith"><div class="slot"><video class="vslot" muted loop playsinline preload="none" poster="assets/r2s2r/with-context.jpg" data-src="assets/r2s2r/with-context.mp4" aria-label="A real SO-101 run with the context: both blocks go into the cabinet"></video></div><h3>With the context</h3><p>The agent reads the context and runs the task on a new real layout: both blocks in. Pauses cut, 4× speed.</p></div>
-    <div class="node" id="nWithout"><div class="slot"><video class="vslot" muted loop playsinline preload="none" poster="assets/r2s2r/without-context.jpg" data-src="assets/r2s2r/without-context.mp4" aria-label="A real SO-101 run without the context: no block goes in"></video></div><h3>Without the context</h3><p>The same agent on a new real layout, without the context: no block goes in. Pauses cut, 4× speed.</p></div>
+    <div class="node" id="nWith"><div class="slot"><video class="vslot" muted loop playsinline preload="none" poster="assets/r2s2r/with-context-diagram.jpg" data-src="assets/r2s2r/with-context-diagram.mp4" aria-label="A real SO-101 run with the context: both blocks go into the cabinet"></video></div><h3>With the context</h3><p>The agent reads the context and runs the task on a new real layout: both blocks in. Pauses cut, 4× speed.</p></div>
+    <div class="node" id="nWithout"><div class="slot"><video class="vslot" muted loop playsinline preload="none" poster="assets/r2s2r/without-context-diagram.jpg" data-src="assets/r2s2r/without-context-diagram.mp4" aria-label="A real SO-101 run without the context: only the orange block goes in"></video></div><h3>Without the context</h3><p>The same agent on the same layout, without the context: only one of the two blocks goes in. Pauses cut, 8× speed.</p></div>
     <svg class="links" id="links" aria-hidden="true"></svg>
   </div>
   <div class="scores">
@@ -251,12 +251,12 @@
     <p class="scores-more"><a href="notes.html">Watch every layout, without and with the context &rarr;</a></p>
   </div>
   <h3 class="sub">On the real robot</h3>
-  <p class="sub-lede">The same task on the real SO-101 arm with a new layout, once with the context and once without; blue and orange blocks stand in for the green and red ones. One run each, so these are demonstrations, not success rates. Pauses are cut and the videos run at 4× speed.</p>
+  <p class="sub-lede">The same task on the real SO-101 arm with a new layout, once with the context and once without; blue and orange blocks stand in for the green and red ones. One run each, so these are demonstrations, not success rates. Pauses are cut; the video with the context runs at 4× speed, the one without at 8×.</p>
   <div class="real2">
     <figure><div class="vbox"><video muted loop playsinline preload="none" poster="assets/r2s2r/with-context.jpg" data-src="assets/r2s2r/with-context.mp4" aria-label="The real run with the context"></video><span class="badge ok">&#10003; Success</span></div>
       <figcaption><b>With the context</b>Both blocks are picked up and dropped through the opening: the blue one, then the orange one. 54 model calls, 26 min.</figcaption></figure>
-    <figure class="fail"><div class="vbox"><video muted loop playsinline preload="none" poster="assets/r2s2r/without-context.jpg" data-src="assets/r2s2r/without-context.mp4" aria-label="The real run without the context"></video><span class="badge no">&#10005; No block in</span></div>
-      <figcaption><b>Without the context</b>It reaches for the blue block again and again and sets it back on the table, and never holds the orange one. No block goes in; the run was stopped after 47 model calls, 21.5 min.</figcaption></figure>
+    <figure class="fail"><div class="vbox"><video muted loop playsinline preload="none" poster="assets/r2s2r/without-context.jpg" data-src="assets/r2s2r/without-context.mp4" aria-label="The real run without the context: only the orange block goes in"></video><span class="badge no">&#10005; 1 of 2 blocks in</span></div>
+      <figcaption><b>Without the context</b>Only the orange block goes in: it is held at the fourth grasp and dropped through the opening. The blue block is never held, after four empty grasps, and ends on the table against the cabinet. The run ran to its end: 97 model calls, 43 min.</figcaption></figure>
   </div>
 </div></section>
 
