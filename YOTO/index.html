@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You Only Teach Once</title>
+<meta name="description" content="You Only Teach Once: Agentic Real-to-Sim and Robot Learning from a Single Demonstration. Zhaoning Wang, Siyi Chen, Jun Gao, University of Michigan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&display=swap" rel="stylesheet">
+<style>
+  :root { --page:#121417; --panel:#1B1E23; --ink:#ECEEF1; --soft:#C9CED5; --muted:#8C949E; --rule:#2A2F36; --wide:125%; }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } }
+  body { margin:0; background:var(--page); color:var(--ink); font-family:'Archivo',system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:inherit; }
+  canvas { display:block; width:100%; height:auto; }
+  .wrap { max-width:1200px; margin:0 auto; padding:0 32px; }
+  section.block { padding:96px 0 40px; }
+  .h { font-stretch:122%; font-weight:780; font-size:38px; letter-spacing:-0.02em; line-height:1.06; margin:0 0 12px; }
+  .lede { color:var(--soft); font-size:17px; line-height:1.55; max-width:62ch; margin:0 0 30px; }
+  .ph-note { display:inline-block; font-size:12.5px; color:var(--muted); border:1px dashed #3A4049; border-radius:20px; padding:3px 11px; margin:0 0 22px; }
+
+  /* the opening */
+  #top { position:relative; height:100vh; min-height:640px; overflow:hidden; }
+  #top .mosaic { position:absolute; inset:-12px; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; opacity:.42; }
+  #top .veil { position:absolute; inset:0; background:radial-gradient(ellipse at center, rgba(18,20,23,.9) 0%, rgba(18,20,23,.64) 55%, rgba(18,20,23,.38) 100%); }
+  #top .center { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 32px; }
+  #top h1 { font-stretch:var(--wide); font-weight:800; letter-spacing:-0.025em; line-height:1.04; margin:0; font-size:clamp(34px, 4.6vw, 58px); max-width:24ch; }
+  #top .who { font-size:clamp(18px, 1.8vw, 23px); font-weight:560; font-stretch:106%; color:#E3E6EA; margin:26px 0 6px; }
+  #top .aff { font-size:16px; color:#A9B0B9; margin:0; }
+  .nav { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:28px; }
+  .nav a { font-size:14px; font-weight:600; padding:9px 16px; border-radius:22px; border:1px solid rgba(236,238,241,.28); text-decoration:none; background:rgba(27,30,35,.55); backdrop-filter:blur(4px); transition:background .2s, border-color .2s; }
+  .nav a:hover { background:rgba(236,238,241,.12); border-color:rgba(236,238,241,.6); }
+  .nav a:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+  #top .cue { position:absolute; bottom:20px; left:50%; transform:translateX(-50%); font-size:13px; color:var(--muted); text-decoration:none; }
+
+  /* the bar that appears after the opening */
+  .bar-top { position:fixed; top:0; left:0; right:0; z-index:40; display:flex; align-items:center; gap:18px; padding:9px 24px; background:rgba(18,20,23,.86); backdrop-filter:blur(8px);
+             border-bottom:1px solid var(--rule); transform:translateY(-100%); transition:transform .35s ease; }
+  .bar-top.on { transform:none; }
+  .bar-top .name { font-stretch:118%; font-weight:760; font-size:15px; white-space:nowrap; text-decoration:none; }
+  .bar-top .nav { margin:0; justify-content:flex-start; flex-wrap:nowrap; overflow-x:auto; }
+  .bar-top .nav a { font-size:12.5px; padding:5px 12px; background:transparent; backdrop-filter:none; white-space:nowrap; }
+  .bar-top .nav a.here { background:var(--ink); color:var(--page); border-color:var(--ink); }
+
+  /* real-to-sim gallery: the heart of the page, two rows that scroll sideways */
+  #real-to-sim .head { display:flex; align-items:flex-end; justify-content:space-between; gap:24px; }
+  #real-to-sim .lede { margin-bottom:8px; max-width:70ch; }
+  .wide { width:min(1560px, calc(100vw - 64px)); margin:0 auto; }
+  .gal-ctl { display:flex; align-items:center; gap:10px; flex:none; margin-bottom:34px; }
+  .gal-ctl button { width:44px; height:44px; border-radius:50%; border:1px solid var(--rule); background:var(--panel); color:var(--ink); cursor:pointer; font-size:20px; line-height:1; }
+  .gal-ctl button:hover:not(:disabled) { border-color:#565d67; }
+  .gal-ctl button:disabled { opacity:.35; cursor:default; }
+  .gal-ctl button:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+  .count { font-size:14px; color:var(--muted); font-variant-numeric:tabular-nums; margin-right:6px; white-space:nowrap; } .count b { color:var(--ink); font-weight:650; }
+  .strip { --gap:18px; position:relative; display:grid; grid-auto-flow:column; grid-template-rows:repeat(2, auto); grid-auto-columns:calc((100% - 4 * var(--gap)) / 4.25);
+           gap:24px var(--gap); overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x mandatory; scrollbar-width:none; padding:4px 0 8px; }
+  .strip::-webkit-scrollbar { display:none; }
+  .strip.drag { scroll-snap-type:none; cursor:grabbing; }
+  .strip:focus-visible { outline:none; }
+  .tile { all:unset; display:block; min-width:0; cursor:pointer; scroll-snap-align:start; }
+  .tile .f { position:relative; aspect-ratio:640/342; border-radius:8px; overflow:hidden; background:var(--panel); box-shadow:0 10px 26px rgba(0,0,0,.35); transition:transform .25s ease, box-shadow .25s ease; }
+  .tile .f canvas { position:absolute; inset:0; width:100%; height:100%; }
+  .tile:hover .f { transform:translateY(-3px); box-shadow:0 18px 36px rgba(0,0,0,.5); }
+  .tile:focus-visible .f { outline:2px solid var(--ink); outline-offset:3px; }
+  .tile .open { position:absolute; right:10px; top:10px; font-size:12px; font-weight:600; padding:3px 10px; border-radius:20px; background:rgba(0,0,0,.62); color:#fff; opacity:0; transition:opacity .2s; }
+  .tile:hover .open, .tile:focus-visible .open { opacity:1; }
+  .tile .t { font-size:15.5px; font-weight:650; font-stretch:108%; margin:11px 2px 0; }
+  .tile .w { font-size:13px; color:var(--muted); margin:3px 2px 0; }
+  .tile .w em { font-style:normal; font-size:11px; font-weight:600; margin-left:6px; white-space:nowrap; padding:1px 7px; border-radius:10px; border:1px solid var(--rule); }
+  .track { height:3px; border-radius:2px; background:var(--rule); margin-top:20px; position:relative; overflow:hidden; }
+  .track i { position:absolute; top:0; bottom:0; left:0; border-radius:2px; background:#9AA1AA; }
+  #real-to-sim .ph-note { margin:24px 0 0; }
+
+  /* the scene popup: the full replay, exterior and wrist cameras, each real | twin | X-ray */
+  .pop { width:min(1500px, 96vw); max-width:none; max-height:94vh; padding:0; border:1px solid var(--rule); border-radius:12px; background:#15181C; color:var(--ink); overflow:auto; }
+  .pop::backdrop { background:rgba(10,12,14,.84); backdrop-filter:blur(3px); }
+  .pop .in { padding:18px 22px 20px; }
+  .pop .top { display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:12px; }
+  .pop h3 { font-stretch:114%; font-weight:740; font-size:23px; letter-spacing:-0.01em; margin:0; }
+  .pop .meta { color:var(--muted); font-size:14px; margin:4px 0 0; }
+  .pop .x { font:inherit; font-size:14px; padding:7px 14px; border-radius:20px; border:1px solid var(--rule); background:var(--panel); color:var(--ink); cursor:pointer; }
+  .pop .heads { display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); font-size:13.5px; font-weight:650; margin:0 0 6px; }
+  .pop .heads span { padding-left:2px; } .pop .heads i { font-style:normal; font-weight:400; color:var(--muted); margin-left:6px; }
+  .pop .cam { margin:0 0 12px; } .pop .cam p { font-size:12.5px; color:var(--muted); margin:0 0 5px; }
+  .pop video { width:100%; display:block; border-radius:6px; background:#000; }
+  .pop .bar { display:flex; align-items:center; gap:12px; margin-top:6px; }
+  .pop .bar button { font:inherit; font-size:13px; width:74px; padding:5px 0; border-radius:20px; border:1px solid var(--rule); background:transparent; color:var(--ink); cursor:pointer; }
+  .pop .bar input { flex:1; accent-color:#ECEEF1; }
+  .pop .bar span { font-size:13px; color:var(--muted); font-variant-numeric:tabular-nums; min-width:92px; text-align:right; }
+
+  /* how it works */
+  .deck { max-width:1080px; }
+  .row { display:grid; grid-template-columns:minmax(0,60%) minmax(0,1fr); gap:34px; align-items:center; }
+  .vis { position:relative; aspect-ratio:16/10.5; border-radius:6px; overflow:hidden; background:var(--panel); }
+  .vis > canvas { position:absolute; inset:0; width:100%; height:100%; cursor:grab; transition:opacity .6s; }
+  .vis > canvas:active { cursor:grabbing; }
+  .vis.dim > canvas { opacity:.16; }
+  .ov { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; gap:10px; padding:18px; opacity:0; pointer-events:none; transition:opacity .6s; }
+  .ov.on { opacity:1; pointer-events:auto; }
+  .ov .pair { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .ov img { width:100%; display:block; border-radius:4px; }
+  .ov canvas { border-radius:5px; }
+  .ov .verdict { margin:0; font-size:14px; font-weight:620; } .ov .verdict span { font-weight:400; color:var(--muted); }
+  .pill { position:absolute; font-size:12px; color:#C9CED5; background:rgba(18,20,23,.72); padding:3px 10px; border-radius:20px; pointer-events:none; transition:opacity .4s; }
+  .hint { left:10px; bottom:9px; } .vis.dim .hint { opacity:0; }
+  .legend3 { right:10px; top:10px; opacity:0; } .legend3.on { opacity:1; }
+  .legend3 b { display:inline-block; width:9px; height:9px; border-radius:50%; margin:0 5px 0 8px; } .legend3 b:first-child { margin-left:0; }
+  .step { display:none; } .step.on { display:block; animation:stepin .5s ease; }
+  @keyframes stepin { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+  .step .n { font-size:13px; color:var(--muted); margin:0 0 6px; }
+  .step .title { font-stretch:118%; font-weight:760; font-size:28px; letter-spacing:-0.015em; margin:0 0 10px; }
+  .step .txt { font-size:16px; line-height:1.55; margin:0 0 14px; max-width:36ch; color:var(--soft); }
+  .chips span { display:inline-block; font-size:12px; border:1px solid var(--rule); border-radius:20px; padding:2px 10px; margin:0 6px 6px 0; color:var(--muted); }
+  .steps { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-top:20px; }
+  .steps button { all:unset; cursor:pointer; font-size:12.5px; color:var(--muted); padding-top:8px; position:relative; }
+  .steps button::before { content:''; position:absolute; left:0; right:0; top:0; height:3px; border-radius:2px; background:var(--rule); }
+  .steps button i { position:absolute; left:0; top:0; height:3px; border-radius:2px; background:var(--ink); width:0; }
+  .steps button.on { color:var(--ink); font-weight:600; }
+  .steps button:focus-visible { outline:2px solid var(--muted); outline-offset:4px; }
+  .ctl { display:flex; justify-content:space-between; align-items:center; margin-top:12px; font-size:12.5px; color:var(--muted); }
+  .ctl button { font:inherit; font-size:12.5px; padding:4px 12px; border-radius:20px; border:1px solid var(--rule); background:transparent; color:var(--ink); cursor:pointer; }
+
+  /* placeholders */
+  .ph { position:relative; border-radius:5px; background:repeating-linear-gradient(135deg, #1B1E23 0 14px, #1E2127 14px 28px); border:1px solid var(--rule);
+        display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:13px; aspect-ratio:640/342; }
+  .ph::before { content:''; width:0; height:0; border-left:16px solid #59606A; border-top:10px solid transparent; border-bottom:10px solid transparent; margin-right:10px; }
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  .vids figure { margin:0; } .vids video { width:100%; display:block; border-radius:10px; background:var(--panel); aspect-ratio:16/9; object-fit:cover; box-shadow:0 18px 44px rgba(0,0,0,.4); }
+  .vids figcaption { font-size:14.5px; color:var(--soft); margin-top:14px; line-height:1.5; }
+  .vids figcaption b { display:block; font-stretch:114%; font-weight:720; font-size:20px; color:var(--ink); margin-bottom:4px; }
+  .results { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; font-size:14px; color:var(--muted); }
+  .results span { border:1px dashed #3A4049; border-radius:20px; padding:5px 13px; }
+  .cols h3 { font-stretch:112%; font-weight:700; font-size:18px; margin:0 0 4px; }
+  .cols .res { font-size:13px; color:var(--muted); margin:0 0 14px; }
+  .cols .res span { border:1px dashed #3A4049; border-radius:20px; padding:1px 9px; margin-left:4px; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+  .cap3 { font-size:13.5px; color:var(--soft); margin:8px 0 0; }
+  .flow { display:grid; grid-template-columns:minmax(0,1fr) 36px minmax(0,1fr) 36px minmax(0,1fr); align-items:center; }
+  .flow .arrow { justify-self:center; width:20px; height:20px; }
+  .flow h3 { font-stretch:112%; font-weight:700; font-size:16px; margin:12px 0 4px; } .flow p { font-size:13.5px; color:var(--soft); margin:0; line-height:1.5; }
+  footer { border-top:1px solid var(--rule); margin-top:80px; padding:28px 0 40px; font-size:13.5px; color:var(--muted); }
+  @media (max-width: 900px) {
+    .strip { grid-auto-columns:calc((100% - var(--gap)) / 1.6); } #real-to-sim .head { display:block; } .pop .heads { font-size:12px; } .row, .cols { grid-template-columns:1fr; } .steps { grid-template-columns:repeat(4,1fr); }
+    .grid3 { grid-template-columns:1fr; } .flow { grid-template-columns:1fr; } .flow .arrow { transform:rotate(90deg); margin:10px 0; }
+    .bar-top .name { display:none; } .h { font-size:30px; }
+  }
+</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }</script>
+</head>
+<body>
+
+<header class="bar-top" id="barTop">
+  <a class="name" href="#top">You Only Teach Once</a>
+  <nav class="nav" aria-label="Sections"><a href="#real-to-sim">Real-to-sim demos</a><a href="#how">How it works</a><a href="#icl">In-context learning demos</a><a href="#real">Real demos</a><a href="#sim2real">Real-to-sim-to-real</a></nav>
+</header>
+
+<section id="top">
+  <div class="mosaic" id="mosaic"></div><div class="veil"></div>
+  <div class="center">
+    <h1>You Only Teach Once: Agentic Real-to-Sim and Robot Learning from a Single Demonstration</h1>
+    <p class="who">Zhaoning Wang, Siyi Chen, Jun Gao</p>
+    <p class="aff">University of Michigan</p>
+    <nav class="nav" aria-label="Sections"><a href="#real-to-sim">Real-to-sim demos</a><a href="#how">How it works</a><a href="#icl">In-context learning demos</a><a href="#real">Real demos</a><a href="#sim2real">Real-to-sim-to-real</a></nav>
+  </div>
+  <a class="cue" href="#real-to-sim">Scroll for the demos</a>
+</section>
+
+<section class="block" id="real-to-sim">
+  <div class="wide head">
+    <div><h2 class="h">Real-to-sim demos</h2>
+      <p class="lede">Each scene is one recorded robot episode. Left of the line is the real robot; right of it, its physics twin in Isaac Sim replays the same recorded actions. Point at a scene to move the line, click it for the full videos, and scroll sideways for more.</p></div>
+    <div class="gal-ctl"><span class="count" id="count" aria-live="polite"></span><button type="button" id="prev" aria-label="Previous scenes">&#8249;</button><button type="button" id="next" aria-label="Next scenes">&#8250;</button></div>
+  </div>
+  <div class="wide">
+    <div class="strip" id="strip" tabindex="0" aria-label="Real-to-sim scenes; scroll sideways for more"></div>
+    <div class="track" aria-hidden="true"><i id="thumb"></i></div>
+  </div>
+</section>
+
+<section class="block" id="how"><div class="wrap">
+  <h2 class="h">How it works</h2>
+  <p class="lede">From one recorded demonstration to a physics scene that replays it. An agent runs each tool and checks the result before moving on. The steps play on their own; drag the scene to look around.</p>
+  <div class="deck" id="deck">
+    <div class="row">
+      <div class="vis" id="vis">
+        <canvas id="v3d"></canvas>
+        <div class="ov" id="ovCheck"><div class="pair"><img src="assets/pipe/s22-xray-grapes.jpg" alt="Real grapes with their outline, beside the designed grapes"><img src="assets/pipe/s22-xray-bowl.jpg" alt="Real bowl with its outline, beside the designed bowl"></div></div>
+        <div class="ov" id="ovJudge"><canvas id="seamJ" width="1280" height="684"></canvas><p class="verdict">GPT-6 judge: accepted <span>the real video left of the line, the replay right of it</span></p></div>
+        <span class="pill legend3" id="legend3"><b style="background:#9a4fd0"></b>grapes<b style="background:#2f9ac9"></b>bowl</span>
+        <span class="pill hint">Drag to turn, scroll to zoom</span>
+      </div>
+      <div id="stepTexts"></div>
+    </div>
+    <div class="steps" id="steps"></div>
+    <div class="ctl"><span id="ctlNote">The steps play on their own.</span><button type="button" id="pp" aria-pressed="false">Pause</button></div>
+  </div>
+</div></section>
+
+<section class="block" id="icl"><div class="wrap">
+  <h2 class="h">In-context learning demos</h2>
+  <p class="lede">The demonstration also teaches a robot agent. Its twin is reshuffled into new layouts, where the agent practises the task and revises its playbook; the model's weights never change.</p>
+  <p class="ph-note">Placeholder section: videos and results to come</p>
+  <div class="cols">
+    <div><h3>The reconstructed twin</h3><p class="res">The demonstration replayed in simulation</p><div class="ph">Twin video</div></div>
+    <div><h3>One of the shuffled layouts</h3><p class="res">The same twin with the objects in new places, where the agent practises</p><div class="ph">Shuffled layout video</div></div>
+  </div>
+  <div class="results"><span>Before practice: result to come</span><span>After practice: result to come</span></div>
+</div></section>
+
+<section class="block" id="real"><div class="wrap">
+  <h2 class="h">Real demos</h2>
+  <p class="lede">The real robot doing the tasks.</p>
+  <p class="ph-note">Placeholder section: real robot videos to come</p>
+  <div class="grid3"><div><div class="ph">Real robot video</div><p class="cap3">Task name</p></div><div><div class="ph">Real robot video</div><p class="cap3">Task name</p></div><div><div class="ph">Real robot video</div><p class="cap3">Task name</p></div></div>
+</div></section>
+
+<section class="block" id="sim2real"><div class="wrap">
+  <h2 class="h">Real-to-sim-to-real</h2>
+  <p class="lede">What the agent learned by practising in the twin, run back on the real robot.</p>
+  <p class="ph-note">Placeholder section: videos to come</p>
+  <div class="flow">
+    <div><div class="ph">Real demonstration</div><h3>One real demonstration</h3><p>The robot is taught the task once.</p></div>
+    <svg class="arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h12M11 5l5 5-5 5" fill="none" stroke="#8C949E" stroke-width="1.8"/></svg>
+    <div><div class="ph">Practice in the twin</div><h3>Practice in the twin</h3><p>The agent practises new layouts in simulation.</p></div>
+    <svg class="arrow" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h12M11 5l5 5-5 5" fill="none" stroke="#8C949E" stroke-width="1.8"/></svg>
+    <div><div class="ph">On the real robot</div><h3>Back on the real robot</h3><p>The practised playbook runs on new real layouts.</p></div>
+  </div>
+</div></section>
+
+<dialog class="pop" id="pop" aria-labelledby="popTitle">
+  <div class="in">
+    <div class="top"><div><h3 id="popTitle"></h3><p class="meta" id="popMeta"></p></div><button type="button" class="x" id="popClose">Close</button></div>
+    <div class="heads"><span>Real</span><span>Physics twin</span><span>X-ray<i>the twin's objects outlined on the real video</i></span></div>
+    <div class="cam"><p>Exterior camera</p><video id="pvExt" muted loop playsinline preload="auto"></video></div>
+    <div class="cam"><p>Wrist camera</p><video id="pvWrist" muted loop playsinline preload="auto"></video></div>
+    <div class="bar"><button type="button" id="popPlay">Pause</button><input type="range" id="popSeek" min="0" max="1000" value="0" aria-label="Position in the videos"><span id="popTime"></span></div>
+  </div>
+</dialog>
+
+<footer><div class="wrap">Zhaoning Wang, Siyi Chen, Jun Gao. University of Michigan.</div></footer>
+
+
+<script>
+// --- shared: clips, seams, what is on screen ---
+const CLIPS = 'assets/clips/';
+const SCENES = [
+  ['12', 'Marker into a purple box', 'IPRL'], ['22', 'Toy grapes into a bowl', 'RAIL'], ['19', 'Silver flask to the right', 'RAD', 'medium'],
+  ['18', 'Toy fry into a carton', 'PennPAL'], ['39', 'Wooden block into a cup', 'TRI'], ['11', 'Marker into a white mug', 'IPRL'],
+  ['05', 'White spoon into a mug', 'CLVR'], ['16', 'Marker into a clear cup', 'IRIS'], ['01', 'Green block into a black bowl', 'AUTOLab'],
+  ['13', 'Press a light switch', 'IPRL', 'medium'],
+];
+const STILL = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const videos = {};
+const vid = (name) => videos[name] || (videos[name] = Object.assign(document.createElement('video'),
+  { src: `${CLIPS}${name}.mp4`, muted: true, loop: true, playsInline: true, autoplay: true, crossOrigin: 'anonymous', preload: 'auto' }));
+window.__vid = vid;
+const fit = (c) => { const r = c.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2), w = Math.round(r.width * d);
+  if (w && c.width !== w) { c.width = w; c.height = Math.round(w * 342 / 640); } return d; };
+const fitBox = (c) => { const r = c.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2), w = Math.round(r.width * d), h = Math.round(r.height * d);
+  if (w && (c.width !== w || c.height !== h)) { c.width = w; c.height = h; } return d; };
+function seam(c, v, x, d, knob) {             // real (the clip's left half) left of the line, the twin (its right half) right of it, both filling the frame
+  const ctx = c.getContext('2d'), w = c.width, h = c.height, pw = v.videoWidth / 2, ph = v.videoHeight, sx = Math.round(x * w);
+  const k = Math.max(w / pw, h / ph), dw = pw * k, dh = ph * k, ox = (w - dw) / 2, oy = (h - dh) / 2;
+  ctx.save(); ctx.beginPath(); ctx.rect(0, 0, sx, h); ctx.clip(); ctx.drawImage(v, 0, 0, pw, ph, ox, oy, dw, dh); ctx.restore();
+  ctx.save(); ctx.beginPath(); ctx.rect(sx, 0, w - sx, h); ctx.clip(); ctx.drawImage(v, pw, 0, pw, ph, ox, oy, dw, dh); ctx.restore();
+  ctx.fillStyle = 'rgba(255,255,255,.96)'; ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = 8 * d; ctx.fillRect(sx - d, 0, 2 * d, h); ctx.shadowBlur = 0;
+  if (knob) { const r = 18 * d, cy = h / 2; ctx.beginPath(); ctx.arc(sx, cy, r, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = 12 * d; ctx.fill(); ctx.shadowBlur = 0;
+    ctx.strokeStyle = '#1F2328'; ctx.lineWidth = 2 * d; ctx.beginPath(); ctx.moveTo(sx - 4 * d, cy - 6 * d); ctx.lineTo(sx - 9 * d, cy); ctx.lineTo(sx - 4 * d, cy + 6 * d);
+    ctx.moveTo(sx + 4 * d, cy - 6 * d); ctx.lineTo(sx + 9 * d, cy); ctx.lineTo(sx + 4 * d, cy + 6 * d); ctx.stroke(); }
+}
+window.__seam = seam;
+const onScreen = {};
+const io = new IntersectionObserver((es) => es.forEach((e) => { onScreen[e.target.id] = e.isIntersecting; }), { rootMargin: '120px' });
+['top', 'real-to-sim', 'how', 'icl', 'real', 'sim2real'].forEach((id) => io.observe(document.getElementById(id)));
+
+// --- the bar after the opening, and which section is here ---
+const barTop = document.getElementById('barTop');
+new IntersectionObserver(([e]) => barTop.classList.toggle('on', !e.isIntersecting), { threshold: 0.12 }).observe(document.getElementById('top'));
+const links = [...barTop.querySelectorAll('.nav a')];
+const here = new IntersectionObserver((es) => es.forEach((e) => {          // the section across the middle of the screen
+  if (e.isIntersecting) links.forEach((a) => a.classList.toggle('here', a.getAttribute('href') === `#${e.target.id}`)); }), { rootMargin: '-45% 0px -50% 0px' });
+['real-to-sim', 'how', 'icl', 'real', 'sim2real'].forEach((id) => here.observe(document.getElementById(id)));
+
+// --- the opening mosaic ---
+const IDS = SCENES.map((x) => x[0]), mosaic = document.getElementById('mosaic'), mos = [];
+for (let i = 0; i < 25; i++) { const c = document.createElement('canvas'); c.width = 640; c.height = 342; mosaic.append(c); mos.push({ c, clip: `s${IDS[(i * 3) % IDS.length]}`, i }); }
+
+// --- the real-to-sim gallery: two rows that scroll sideways; a click opens the scene's full videos ---
+const FULL = 'assets/full/';
+const DEMOS = SCENES.map(([id, task, lab, level]) => ({ key: `s${id}`, clip: `s${id}`, task, where: `DROID, recorded at ${lab}`, level }));
+DEMOS.splice(1, 0, { key: 'so101', clip: 'so101-blocks', task: 'Two blocks to a container', where: 'SO-101, our recording', level: 'medium', note: '2× speed' });
+const strip = document.getElementById('strip'), count = document.getElementById('count'), thumb = document.getElementById('thumb');
+const prevB = document.getElementById('prev'), nextB = document.getElementById('next'), tiles = [];
+const clamp01 = (u) => Math.min(1, Math.max(0, u));
+DEMOS.forEach((demo, i) => {
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'tile';
+  b.innerHTML = `<div class="f"><canvas></canvas><span class="open">Full videos</span></div><p class="t">${demo.task}</p>
+    <p class="w">${demo.where}${demo.level === 'medium' ? '<em>medium</em>' : ''}${demo.note ? `<em>${demo.note}</em>` : ''}</p>`;
+  strip.append(b);
+  const tile = { b, c: b.querySelector('canvas'), f: b.querySelector('.f'), demo, i, hover: null, seen: true };
+  tile.f.addEventListener('pointermove', (e) => { if (drag?.moved) return; const r = tile.f.getBoundingClientRect(); tile.hover = clamp01((e.clientX - r.left) / r.width); });
+  tile.f.addEventListener('pointerleave', () => { tile.hover = null; });
+  b.addEventListener('click', () => { if (!dragged) openScene(demo); });
+  tiles.push(tile);
+});
+const step = () => (tiles.length > 2 ? tiles[2].b.offsetLeft - tiles[0].b.offsetLeft : strip.clientWidth);     // one column
+function stripUpdate() {
+  const r = strip.getBoundingClientRect(), max = strip.scrollWidth - strip.clientWidth, col = Math.round(strip.scrollLeft / step());
+  tiles.forEach((tile) => { const b = tile.b.getBoundingClientRect(); tile.seen = b.right > r.left && b.left < r.right; });
+  count.innerHTML = `<b>${Math.min(tiles.length, col * 2 + 1)}–${Math.min(tiles.length, (col + 4) * 2)}</b> of ${tiles.length}`;
+  prevB.disabled = strip.scrollLeft <= 2; nextB.disabled = strip.scrollLeft >= max - 2;
+  thumb.style.width = `${strip.clientWidth / strip.scrollWidth * 100}%`; thumb.style.left = `${strip.scrollLeft / strip.scrollWidth * 100}%`;
+}
+let ticking = false;
+strip.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { ticking = false; stripUpdate(); }); } }, { passive: true });
+addEventListener('resize', stripUpdate);
+const page = (dir) => strip.scrollBy({ left: dir * 4 * step(), behavior: STILL ? 'auto' : 'smooth' });
+prevB.addEventListener('click', () => page(-1)); nextB.addEventListener('click', () => page(1));
+strip.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); page(e.key === 'ArrowRight' ? 1 : -1); } });
+let drag = null, dragged = false;                 // a mouse drags the rows sideways; touch and trackpads scroll them natively
+strip.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse' || e.button !== 0) return; drag = { x: e.clientX, left: strip.scrollLeft, moved: false }; dragged = false; });
+addEventListener('pointermove', (e) => { if (!drag) return; const dx = e.clientX - drag.x;
+  if (!drag.moved && Math.abs(dx) > 5) { drag.moved = true; strip.classList.add('drag'); } if (drag.moved) strip.scrollLeft = drag.left - dx; });
+addEventListener('pointerup', () => { if (!drag) return; dragged = drag.moved; drag = null; strip.classList.remove('drag');
+  if (dragged) strip.scrollTo({ left: Math.round(strip.scrollLeft / step()) * step(), behavior: STILL ? 'auto' : 'smooth' });
+  setTimeout(() => { dragged = false; }, 0); });
+stripUpdate();
+
+// --- the scene popup: the exterior and wrist videos play together, one control for both ---
+const pop = document.getElementById('pop'), pv = [document.getElementById('pvExt'), document.getElementById('pvWrist')];
+const popPlay = document.getElementById('popPlay'), popSeek = document.getElementById('popSeek'), popTime = document.getElementById('popTime');
+const mmss = (x) => (Number.isFinite(x) ? `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, '0')}` : '0:00');
+function openScene(demo) {
+  document.getElementById('popTitle').textContent = demo.task;
+  document.getElementById('popMeta').textContent = `${demo.where} · accepted at ${demo.level || 'simple'} · the full replay at its real speed`;
+  pv[0].src = `${FULL}${demo.key}-ext.mp4`; pv[1].src = `${FULL}${demo.key}-wrist.mp4`;
+  pv.forEach((v) => v.play().catch(() => {})); popPlay.textContent = 'Pause';
+  pop.showModal();
+}
+pop.addEventListener('close', () => pv.forEach((v) => { v.pause(); v.removeAttribute('src'); v.load(); }));
+pop.addEventListener('click', (e) => { if (e.target === pop) pop.close(); });          // a click on the dimmed page around it
+document.getElementById('popClose').addEventListener('click', () => pop.close());
+popPlay.addEventListener('click', () => { const go = pv[0].paused; pv.forEach((v) => (go ? v.play().catch(() => {}) : v.pause())); popPlay.textContent = go ? 'Pause' : 'Play'; });
+popSeek.addEventListener('input', () => pv.forEach((v) => { if (v.duration) v.currentTime = popSeek.value / 1000 * v.duration; }));
+function popSync() {                              // the wrist video follows the exterior one
+  const [a, b] = pv;
+  if (a.readyState >= 2 && b.readyState >= 2 && Math.abs(a.currentTime - b.currentTime) > 0.15) b.currentTime = a.currentTime;
+  if (a.duration && document.activeElement !== popSeek) popSeek.value = Math.round(a.currentTime / a.duration * 1000);
+  popTime.textContent = `${mmss(a.currentTime)} / ${mmss(a.duration)}`;
+}
+
+const t0 = performance.now();
+function loop(now) {
+  const t = (now - t0) / 1000;
+  if (onScreen.top) mos.forEach(({ c, clip, i }) => { const v = vid(clip); if (v.readyState < 2) return; const d = fit(c);
+    seam(c, v, STILL ? 0.5 : 0.5 + 0.38 * Math.sin(t * 0.6 - (i % 5) * 0.55 - Math.floor(i / 5) * 0.85), d, false); });
+  if (onScreen['real-to-sim'] && !pop.open) tiles.forEach((tile) => { if (!tile.seen) return; const v = vid(tile.demo.clip); if (v.readyState < 2) return;
+    const d = fitBox(tile.c), col = Math.floor(tile.i / 2), row = tile.i % 2;
+    seam(tile.c, v, tile.hover ?? (STILL ? 0.5 : 0.5 + 0.38 * Math.sin(t * 0.6 - col * 0.55 - row * 0.85)), d, false); });
+  if (pop.open) popSync();
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+const playAll = () => Object.values(videos).forEach((v) => { if (v.paused && !document.hidden) v.play().catch(() => {}); });
+setInterval(playAll, 1500);
+document.addEventListener('visibilitychange', () => { if (document.hidden) Object.values(videos).forEach((v) => v.pause()); else playAll(); });
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+const BASE = 'assets/s22/';
+const COLOURS = { purple_grapes: 0x9a4fd0, white_bowl: 0x2f9ac9 };
+const Y_UP_TO_Z_UP = Math.PI / 2;
+const STILL = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SPEED = 1.25;                 // the steps and their animations run 1.25 times faster than the durations below
+const STEPS = [
+  { name: 'Record', dur: 8, chips: ['Video', 'Depth', 'Robot actions'], txt: 'It starts from one demonstration: video from the robot\'s cameras, depth, and the actions the robot recorded. Depth turns the frames into this cloud of points.' },
+  { name: 'Align', dur: 7, chips: ['Camera poses', 'Robot pose'], txt: 'The cameras and the robot are placed in one frame. Each camera looks at the scene from where it stood, and its first frame hangs in front of it.' },
+  { name: 'Measure', dur: 8, chips: ['SAM3', 'Depth'], txt: 'SAM3 segments each object in the video. Depth lifts the segment into 3D, and a box is measured around it.' },
+  { name: 'Reconstruct', dur: 8, chips: ['GPT-6', 'Blender'], txt: 'GPT-6 designs a mesh for each object in Blender, sized to its measured box. The table becomes a support mesh.' },
+  { name: 'Check', dur: 6, chips: ['GPT-6'], txt: 'Each designed object is outlined on the real frames. GPT-6 compares outline and object, and asks for fixes.' },
+  { name: 'Replay', dur: 10, chips: ['Isaac Sim'], txt: 'The recorded actions drive the robot in Isaac Sim. The grapes move only by contact: grasped, carried and dropped into the bowl.' },
+  { name: 'Judge', dur: 8, chips: ['GPT-6'], txt: 'GPT-6 compares the replay with the video. Where they disagree, the agent repairs the scene and replays it, until they match.' },
+];
+const texts = document.getElementById('stepTexts'), bar = document.getElementById('steps'), vis = document.getElementById('vis');
+STEPS.forEach((s, i) => {
+  texts.insertAdjacentHTML('beforeend', `<div class="step" data-i="${i}"><p class="n">Step ${i + 1} of ${STEPS.length}</p><p class="title">${s.name}</p><p class="txt">${s.txt}</p><div class="chips">${s.chips.map((c) => `<span>${c}</span>`).join('')}</div></div>`);
+  const b = document.createElement('button'); b.type = 'button'; b.innerHTML = `<i></i>${s.name}`; b.addEventListener('click', () => go(i)); bar.append(b);
+});
+
+THREE.Object3D.DEFAULT_UP.set(0, 0, 1);
+const canvas = document.getElementById('v3d');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(38, 1.5, 0.01, 30); camera.up.set(0, 0, 1);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x6e7884, 1.6));
+const sun = new THREE.DirectionalLight(0xffffff, 2.3); sun.position.set(1.2, -1.4, 2.6); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -1, right: 1, top: 1, bottom: -1, near: 0.1, far: 6 }); scene.add(sun, sun.target); sun.target.position.set(0.55, -0.1, 0);
+const controls = new OrbitControls(camera, canvas); controls.enableDamping = true; controls.dampingFactor = 0.08;
+let userTook = false, holding = false, holdUntil = 0; const HOLD_S = 4;
+controls.addEventListener('start', () => { userTook = true; fly = null; holding = true; });
+controls.addEventListener('end', () => { holding = false; holdUntil = performance.now() + HOLD_S * 1000; });
+canvas.addEventListener('wheel', () => { holdUntil = performance.now() + HOLD_S * 1000; }, { passive: true });
+
+const G = Object.fromEntries(['cloud', 'robot', 'frusta', 'segments', 'boxes', 'meshes', 'sim'].map((k) => { const g = new THREE.Group(); scene.add(g); return [k, g]; }));
+const TYPES = { float32: Float32Array, uint32: Uint32Array, uint8: Uint8Array, int32: Int32Array, float64: Float64Array };
+const taker = (index, buffer) => (name) => { const e = index[name], n = e.shape.reduce((a, b) => a * b, 1); return new TYPES[e.dtype](buffer, e.offset, n); };
+const m4 = (a, o = 0) => new THREE.Matrix4().set(...Array.from(a.subarray(o, o + 16)));
+const json = (p) => fetch(BASE + p).then((r) => r.json()), bin = (p) => fetch(BASE + p).then((r) => r.arrayBuffer());
+const loader = new GLTFLoader(), glbCache = {};
+const glb = (id) => (glbCache[id] = glbCache[id] || bin(`glb/${id}.glb`).then((b) => loader.parseAsync(b, '')).then((g) => g.scene));
+function placed(object, matrix) { const inner = new THREE.Group(); inner.rotation.x = Y_UP_TO_Z_UP; inner.add(object);
+  const outer = new THREE.Group(); outer.matrixAutoUpdate = false; outer.add(inner); if (matrix) outer.matrix.copy(matrix); return outer; }
+const fade = (root, op) => root.traverse((o) => { if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach((m) => { m.transparent = op < 1; m.opacity = op; m.depthWrite = op >= 0.99; }); });
+const own = (root) => { root.traverse((o) => { if (o.isMesh) { o.material = o.material.clone(); o.castShadow = true; o.receiveShadow = true; } }); return root; };
+
+const D = {};
+async function load() {
+  const [robotMeta, robotBuf, sceneMeta, pointsBuf, simMeta, simBuf, cloudBuf, cams] = await Promise.all([
+    json('robot.json'), bin('robot.bin'), json('scene.json'), bin('points.bin'), json('sim.json'), bin('sim.bin'), bin('cloud/0.bin'), json('cameras.json')]);
+  const rt = taker(robotMeta.index, robotBuf);
+  const metal = new THREE.MeshStandardMaterial({ color: 0xc3cad4, metalness: 0.3, roughness: 0.5 }), grip = new THREE.MeshStandardMaterial({ color: 0x3a4250, metalness: 0.2, roughness: 0.6 });
+  D.robot = { steps: robotMeta.steps, n: robotMeta.links.length, poses: rt('poses'), meshes: robotMeta.links.map(({ link, part }) => {
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(rt(`${link}/V`), 3)); g.setIndex(new THREE.BufferAttribute(rt(`${link}/F`), 1)); g.computeVertexNormals();
+    const m = new THREE.Mesh(g, (part === 'arm' ? metal : grip).clone()); m.matrixAutoUpdate = false; m.castShadow = true; G.robot.add(m); return m; }) };
+  const n = new Uint32Array(cloudBuf, 0, 1)[0], xyz = new Float32Array(cloudBuf, 4, n * 3), rgb = new Uint8Array(cloudBuf, 4 + n * 12, n * 3);
+  const order = Array.from({ length: n }, (_, i) => i).sort((a, b) => xyz[a * 3] - xyz[b * 3]);
+  const sx = new Float32Array(n * 3), sc = new Uint8Array(n * 3);
+  order.forEach((j, i) => { for (let k = 0; k < 3; k++) { sx[i * 3 + k] = xyz[j * 3 + k]; sc[i * 3 + k] = rgb[j * 3 + k]; } });
+  const cg = new THREE.BufferGeometry(); cg.setAttribute('position', new THREE.BufferAttribute(sx, 3)); cg.setAttribute('color', new THREE.BufferAttribute(sc, 3, true));
+  D.cloud = new THREE.Points(cg, new THREE.PointsMaterial({ size: 0.007, vertexColors: true, transparent: true })); D.cloudN = n; G.cloud.add(D.cloud);
+  const tl = new THREE.TextureLoader(); tl.setCrossOrigin('anonymous');
+  D.frusta = Object.entries(cams).map(([id, c]) => {
+    const T = new THREE.Matrix4().set(...c.T.flat()), K = c.K, [W, H] = c.size, dd = 0.22;
+    const corner = (u, v) => new THREE.Vector3((u - K[0][2]) / K[0][0] * dd, (v - K[1][2]) / K[1][1] * dd, dd);
+    const cs = [corner(0, 0), corner(W, 0), corner(W, H), corner(0, H)], o = new THREE.Vector3();
+    const lines = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([o, cs[0], o, cs[1], o, cs[2], o, cs[3], cs[0], cs[1], cs[1], cs[2], cs[2], cs[3], cs[3], cs[0]]),
+      new THREE.LineBasicMaterial({ color: 0xd8dce2, transparent: true }));
+    const quad = new THREE.BufferGeometry(); quad.setAttribute('position', new THREE.BufferAttribute(new Float32Array([...cs[0].toArray(), ...cs[1].toArray(), ...cs[2].toArray(), ...cs[3].toArray()]), 3));
+    quad.setAttribute('uv', new THREE.BufferAttribute(new Float32Array([0, 1, 1, 1, 1, 0, 0, 0]), 2)); quad.setIndex([0, 1, 2, 0, 2, 3]);
+    const tex = tl.load(BASE + c.image); tex.colorSpace = THREE.SRGBColorSpace;
+    const plane = new THREE.Mesh(quad, new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide, transparent: true }));
+    const g = new THREE.Group(); g.matrixAutoUpdate = false; g.add(lines, plane); G.frusta.add(g); return { g, T };
+  });
+  const pt = taker(sceneMeta.points, pointsBuf);
+  D.segments = Object.keys(sceneMeta.points).map((id) => { const g = new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(pt(id), 3));
+    const p = new THREE.Points(g, new THREE.PointsMaterial({ color: COLOURS[id] || 0xe0663d, size: 0.011, transparent: true })); G.segments.add(p); return p; });
+  D.boxes = sceneMeta.boxes.map((b) => { const box = new THREE.Group();
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(...b.size)), new THREE.LineBasicMaterial({ color: COLOURS[b.id] || 0xe0663d, transparent: true }));
+    const fill = new THREE.Mesh(new THREE.BoxGeometry(...b.size), new THREE.MeshBasicMaterial({ color: COLOURS[b.id] || 0xe0663d, transparent: true, opacity: 0.1, depthWrite: false }));
+    box.add(edges, fill); box.position.set(...b.center); box.rotation.z = THREE.MathUtils.degToRad(b.yaw_deg || 0); G.boxes.add(box); return box; });
+  const lay = sceneMeta.layout;
+  const items = [...lay.objects.filter((o) => o.glb).map((o) => ({ id: o.id, pose: o.pose })), ...(lay.support?.pose ? [{ id: 'support', pose: lay.support.pose }] : [])];
+  D.meshes = await Promise.all(items.map(async (it) => { const p = placed(own((await glb(it.id)).clone(true)), new THREE.Matrix4().set(...it.pose.flat())); p.userData.id = it.id; G.meshes.add(p); return p; }));
+  const st = taker(simMeta.index, simBuf);
+  D.sim = { steps: simMeta.steps, ids: simMeta.ids, poses: st('objects'), byId: {} };
+  for (const id of simMeta.ids) { const p = placed(own((await glb(id)).clone(true)), null); G.sim.add(p); D.sim.byId[id] = p; }
+  const support = D.meshes.find((m) => m.userData.id === 'support');
+  if (support) G.sim.add(placed(own((await glb('support')).clone(true)), support.matrix.clone()));
+}
+function poseRobot(step) { const r = D.robot, s = Math.min(Math.max(0, Math.round(step)), r.steps - 1), base = s * r.n * 16; r.meshes.forEach((m, i) => m.matrix.copy(m4(r.poses, base + i * 16))); }
+function poseSim(step) { const sm = D.sim; let row = sm.steps.indexOf(Math.round(step));
+  if (row < 0) row = sm.steps.reduce((b, v, i) => Math.abs(v - step) < Math.abs(sm.steps[b] - step) ? i : b, 0);
+  sm.ids.forEach((id, j) => { const g = sm.byId[id]; if (g) g.matrix.copy(m4(sm.poses, (row * sm.ids.length + j) * 16)); }); }
+
+let fly = null;
+const ease = (u) => u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2, clamp01 = (u) => Math.min(1, Math.max(0, u));
+function flyTo(pos, target, dur = 1.4) { if (userTook) return; fly = { p0: camera.position.clone(), t0: controls.target.clone(), p1: new THREE.Vector3(...pos), t1: new THREE.Vector3(...target), start: performance.now(), dur }; }
+const VIEWS = { wide: [[2.05, -1.75, 1.4], [0.4, -0.05, 0.3]], cams: [[2.3, -0.35, 1.6], [0.45, -0.05, 0.2]], table: [[1.12, -0.82, 0.62], [0.6, -0.14, 0.03]], replay: [[1.45, -1.1, 0.85], [0.52, -0.1, 0.15]] };
+
+let cur = -1, started = 0, elapsed = 0, last = 0, userPaused = false, begun = false, pipeShown = false;
+new IntersectionObserver((es) => { pipeShown = es[es.length - 1].intersectionRatio >= 0.5; }, { threshold: [0, 0.5, 1] }).observe(vis);   // half the 3D panel in view
+const show = (k, on) => { G[k].visible = on; };
+function enter(i) {
+  const s = STEPS[i].name;
+  vis.classList.toggle('dim', s === 'Check' || s === 'Judge');
+  document.getElementById('ovCheck').classList.toggle('on', s === 'Check');
+  document.getElementById('ovJudge').classList.toggle('on', s === 'Judge');
+  document.getElementById('legend3').classList.toggle('on', s === 'Measure' || s === 'Reconstruct');
+  Object.keys(G).forEach((k) => show(k, false));
+  if (s === 'Record') { show('cloud', true); show('robot', true); flyTo(...VIEWS.wide); }
+  if (s === 'Align') { show('cloud', true); show('robot', true); show('frusta', true); poseRobot(0); flyTo(...VIEWS.cams); }
+  if (s === 'Measure') { show('cloud', true); show('segments', true); show('boxes', true); flyTo(...VIEWS.table); }
+  if (s === 'Reconstruct') { show('cloud', true); show('segments', true); show('boxes', true); show('meshes', true); flyTo(...VIEWS.table); }
+  if (s === 'Check' || s === 'Judge') { show('meshes', true); show('robot', true); poseRobot(0); }
+  if (s === 'Replay') { show('robot', true); show('sim', true); flyTo(...VIEWS.replay); }
+}
+function animate(i, t) {
+  const s = STEPS[i].name, r = D.robot;
+  if (s === 'Record') { D.cloud.geometry.setDrawRange(0, Math.floor(D.cloudN * clamp01(STILL ? 1 : t / 2.6))); D.cloud.material.opacity = 1; poseRobot(STILL ? 0 : ((t * 30) % (r.steps + 25))); }
+  if (s === 'Align') { D.cloud.geometry.setDrawRange(0, D.cloudN); D.cloud.material.opacity = 0.55;
+    D.frusta.forEach((f, k) => { const u = ease(clamp01(STILL ? 1 : (t - 0.3 - k * 0.5) / 1.6)); f.g.matrix.copy(f.T.clone().multiply(new THREE.Matrix4().makeTranslation(0, 0, -0.9 * (1 - u))));
+      f.g.children.forEach((c) => { c.material.opacity = u; }); }); }
+  if (s === 'Measure') { D.cloud.geometry.setDrawRange(0, D.cloudN); D.cloud.material.opacity = 0.2;
+    D.segments.forEach((p, k) => { const u = ease(clamp01(STILL ? 1 : (t - 0.4 - k * 0.5) / 1.2)); p.material.opacity = u; p.position.z = 0.06 * (1 - u); });
+    D.boxes.forEach((b, k) => { const u = ease(clamp01(STILL ? 1 : (t - 2.4 - k * 0.5) / 1.2)); b.scale.setScalar(Math.max(0.001, u)); b.children[0].material.opacity = u; b.children[1].material.opacity = 0.1 * u; }); }
+  if (s === 'Reconstruct') { D.cloud.material.opacity = 0.2 * (1 - clamp01(t / 2));
+    D.segments.forEach((p) => { p.material.opacity = 1 - clamp01(STILL ? 1 : t / 1.2); p.position.z = 0; });
+    D.boxes.forEach((b) => { b.scale.setScalar(1); const u = clamp01(STILL ? 1 : (t - 2.6) / 1.4); b.children[0].material.opacity = 1 - 0.75 * u; b.children[1].material.opacity = 0.1 * (1 - u); });
+    D.meshes.forEach((mm, k) => { const u = ease(clamp01(STILL ? 1 : (t - 0.6 - k * 0.45) / 1.3)); mm.children[0].scale.setScalar(0.55 + 0.45 * u); fade(mm, u); }); }
+  if (s === 'Check' || s === 'Judge') D.meshes.forEach((mm) => { mm.children[0].scale.setScalar(1); fade(mm, 1); });
+  if (s === 'Replay') { const step = STILL ? r.steps - 1 : ((t * 24) % (r.steps + 30)); poseRobot(step); poseSim(step); }
+}
+function go(i) { cur = i; started = performance.now(); elapsed = 0; userTook = false;
+  document.querySelectorAll('#stepTexts .step').forEach((e) => e.classList.toggle('on', Number(e.dataset.i) === i));
+  [...bar.children].forEach((b, j) => { b.classList.toggle('on', j === i); b.querySelector('i').style.width = j < i ? '100%' : '0'; }); enter(i); }
+const pp = document.getElementById('pp'), ctlNote = document.getElementById('ctlNote');
+pp.addEventListener('click', () => { userPaused = !userPaused; pp.textContent = userPaused ? 'Play' : 'Pause'; pp.setAttribute('aria-pressed', String(userPaused));
+  ctlNote.textContent = userPaused ? 'Paused. Play to go on, or click a step.' : 'The steps play on their own.'; });
+
+const seamJ = document.getElementById('seamJ');
+function resize() { const w = vis.clientWidth, h = vis.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+new ResizeObserver(resize).observe(vis); resize();
+camera.position.set(...VIEWS.wide[0]); controls.target.set(...VIEWS.wide[1]); controls.update();
+load().then(() => renderer.setAnimationLoop(tick)).catch((e) => vis.insertAdjacentHTML('beforeend', `<p class="pill" style="left:10px;top:10px">The 3D data did not load (${e.message})</p>`));
+function tick(now) {
+  const here = pipeShown;
+  if (here && !begun) { begun = true; go(0); }          // step 1 starts when the reader first reaches the 3D panel
+  if (!begun) { last = now; return; }
+  const t = (now - started) / 1000 * SPEED;
+  if (fly) { const u = ease(clamp01((now - fly.start) / 1000 / fly.dur)); camera.position.lerpVectors(fly.p0, fly.p1, u); controls.target.lerpVectors(fly.t0, fly.t1, u); if (u >= 1) fly = null; }
+  animate(cur, t);
+  if (STEPS[cur].name === 'Judge') { const v = window.__vid('s22'); if (v.readyState >= 2) { const d = Math.min(devicePixelRatio || 1, 2), w = Math.round(seamJ.getBoundingClientRect().width * d);
+    if (w && seamJ.width !== w) { seamJ.width = w; seamJ.height = Math.round(w * 342 / 640); } window.__seam(seamJ, v, STILL ? 0.5 : 0.5 + 0.36 * Math.sin(now / 1000 * 0.6), d, false); } }
+  const dt = last ? Math.min(0.1, (now - last) / 1000) : 0;
+  if (here && !userPaused && !holding && now >= holdUntil) elapsed += dt * SPEED;     // off screen, the step waits
+  const u = elapsed / STEPS[cur].dur; bar.children[cur].querySelector('i').style.width = `${Math.min(1, u) * 100}%`;
+  if (u >= 1) go((cur + 1) % STEPS.length);
+  last = now; controls.update();
+  if (here) renderer.render(scene, camera);
+}
+</script>
+</body>
+</html>
