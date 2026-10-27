@@ -91,21 +91,6 @@ window.GALLERY = [
   "where": "SO-101, our recording"
  },
  {
-  "key": "r2slite-abc-zed-fruit-bowl-right",
-  "run": "2026-10-22/r2slite-abc-zed-fruit-bowl-right",
-  "title": "Put the fake fruits in the bowl",
-  "dataset": "ABC",
-  "level": "none",
-  "accepted": false,
-  "spotlighted": false,
-  "tile": "assets/gallery/r2slite-abc-zed-fruit-bowl-right/tile.mp4",
-  "tile_speed": 2,
-  "poster": "assets/gallery/r2slite-abc-zed-fruit-bowl-right/poster.jpg",
-  "ext": "assets/gallery/r2slite-abc-zed-fruit-bowl-right/ext.mp4",
-  "wrist": "assets/gallery/r2slite-abc-zed-fruit-bowl-right/wrist.mp4",
-  "where": "ABC-130K"
- },
- {
   "key": "r2slite-droidrr-19-silver-flask-to-the-right",
   "run": "2026-10-26/r2slite-droidrr-19-silver-flask-to-the-right",
   "title": "Move the silver flask to the right",
@@ -136,36 +121,6 @@ window.GALLERY = [
   "where": "DROID, recorded at PennPAL"
  },
  {
-  "key": "r2slite-b1-two-blocks-to-container-b100-colour",
-  "run": "2026-10-26/r2slite-b1-two-blocks-to-container-b100-colour",
-  "title": "Put two blocks through the top opening",
-  "dataset": "SO-101",
-  "level": "medium",
-  "accepted": true,
-  "spotlighted": true,
-  "tile": "assets/gallery/r2slite-b1-two-blocks-to-container-b100-colour/tile.mp4",
-  "tile_speed": 2,
-  "poster": "assets/gallery/r2slite-b1-two-blocks-to-container-b100-colour/poster.jpg",
-  "ext": "assets/gallery/r2slite-b1-two-blocks-to-container-b100-colour/ext.mp4",
-  "wrist": "assets/gallery/r2slite-b1-two-blocks-to-container-b100-colour/wrist.mp4",
-  "where": "SO-101, our recording"
- },
- {
-  "key": "r2slite-abc-b10-20261023-01-screwdriver-bin",
-  "run": "2026-10-23/r2slite-abc-b10-20261023-01-screwdriver-bin",
-  "title": "Put the screwdriver in the bin",
-  "dataset": "ABC",
-  "level": "simple",
-  "accepted": true,
-  "spotlighted": false,
-  "tile": "assets/gallery/r2slite-abc-b10-20261023-01-screwdriver-bin/tile.mp4",
-  "tile_speed": 1,
-  "poster": "assets/gallery/r2slite-abc-b10-20261023-01-screwdriver-bin/poster.jpg",
-  "ext": "assets/gallery/r2slite-abc-b10-20261023-01-screwdriver-bin/ext.mp4",
-  "wrist": "assets/gallery/r2slite-abc-b10-20261023-01-screwdriver-bin/wrist.mp4",
-  "where": "ABC-130K"
- },
- {
   "key": "r2slite-droidrr-16-marker-into-clear-cup",
   "run": "2026-10-26/r2slite-droidrr-16-marker-into-clear-cup",
   "title": "Put the black marker in the cup",
@@ -179,6 +134,36 @@ window.GALLERY = [
   "ext": "assets/gallery/r2slite-droidrr-16-marker-into-clear-cup/ext.mp4",
   "wrist": "assets/gallery/r2slite-droidrr-16-marker-into-clear-cup/wrist.mp4",
   "where": "DROID, recorded at IRIS"
+ },
+ {
+  "key": "r2slite-abc-zed-fruit-bowl-right",
+  "run": "2026-10-22/r2slite-abc-zed-fruit-bowl-right",
+  "title": "Put the fake fruits in the bowl",
+  "dataset": "ABC",
+  "level": "none",
+  "accepted": false,
+  "spotlighted": false,
+  "tile": "assets/gallery/r2slite-abc-zed-fruit-bowl-right/tile.mp4",
+  "tile_speed": 2,
+  "poster": "assets/gallery/r2slite-abc-zed-fruit-bowl-right/poster.jpg",
+  "ext": "assets/gallery/r2slite-abc-zed-fruit-bowl-right/ext.mp4",
+  "wrist": "assets/gallery/r2slite-abc-zed-fruit-bowl-right/wrist.mp4",
+  "where": "ABC-130K"
+ },
+ {
+  "key": "r2slite-b1-two-blocks-to-container-b100-colour",
+  "run": "2026-10-26/r2slite-b1-two-blocks-to-container-b100-colour",
+  "title": "Put two blocks through the top opening",
+  "dataset": "SO-101",
+  "level": "medium",
+  "accepted": true,
+  "spotlighted": true,
+  "tile": "assets/gallery/r2slite-b1-two-blocks-to-container-b100-colour/tile.mp4",
+  "tile_speed": 2,
+  "poster": "assets/gallery/r2slite-b1-two-blocks-to-container-b100-colour/poster.jpg",
+  "ext": "assets/gallery/r2slite-b1-two-blocks-to-container-b100-colour/ext.mp4",
+  "wrist": "assets/gallery/r2slite-b1-two-blocks-to-container-b100-colour/wrist.mp4",
+  "where": "SO-101, our recording"
  },
  {
   "key": "r2slite-droidrr-12-marker-into-purple-box",
@@ -196,21 +181,6 @@ window.GALLERY = [
   "where": "DROID, recorded at IPRL"
  },
  {
-  "key": "r2slite-so101-drawer-side-2-a1",
-  "run": "2026-10-25/r2slite-so101-drawer-side-2-a1",
-  "title": "Pull the drawer out by its knob",
-  "dataset": "SO-101",
-  "level": "simple",
-  "accepted": false,
-  "spotlighted": false,
-  "tile": "assets/gallery/r2slite-so101-drawer-side-2-a1/tile.mp4",
-  "tile_speed": 2,
-  "poster": "assets/gallery/r2slite-so101-drawer-side-2-a1/poster.jpg",
-  "ext": "assets/gallery/r2slite-so101-drawer-side-2-a1/ext.mp4",
-  "wrist": "assets/gallery/r2slite-so101-drawer-side-2-a1/wrist.mp4",
-  "where": "SO-101, our recording"
- },
- {
   "key": "r2slite-droidrr-01-green-block-into-black-bowl",
   "run": "2026-10-26/r2slite-droidrr-01-green-block-into-black-bowl",
   "title": "Put the block in the bowl",
@@ -224,6 +194,36 @@ window.GALLERY = [
   "ext": "assets/gallery/r2slite-droidrr-01-green-block-into-black-bowl/ext.mp4",
   "wrist": "assets/gallery/r2slite-droidrr-01-green-block-into-black-bowl/wrist.mp4",
   "where": "DROID, recorded at AUTOLab"
+ },
+ {
+  "key": "r2slite-abc-b10-20261023-01-screwdriver-bin",
+  "run": "2026-10-23/r2slite-abc-b10-20261023-01-screwdriver-bin",
+  "title": "Put the screwdriver in the bin",
+  "dataset": "ABC",
+  "level": "simple",
+  "accepted": true,
+  "spotlighted": false,
+  "tile": "assets/gallery/r2slite-abc-b10-20261023-01-screwdriver-bin/tile.mp4",
+  "tile_speed": 1,
+  "poster": "assets/gallery/r2slite-abc-b10-20261023-01-screwdriver-bin/poster.jpg",
+  "ext": "assets/gallery/r2slite-abc-b10-20261023-01-screwdriver-bin/ext.mp4",
+  "wrist": "assets/gallery/r2slite-abc-b10-20261023-01-screwdriver-bin/wrist.mp4",
+  "where": "ABC-130K"
+ },
+ {
+  "key": "r2slite-so101-drawer-side-2-a1",
+  "run": "2026-10-25/r2slite-so101-drawer-side-2-a1",
+  "title": "Pull the drawer out by its knob",
+  "dataset": "SO-101",
+  "level": "simple",
+  "accepted": false,
+  "spotlighted": false,
+  "tile": "assets/gallery/r2slite-so101-drawer-side-2-a1/tile.mp4",
+  "tile_speed": 2,
+  "poster": "assets/gallery/r2slite-so101-drawer-side-2-a1/poster.jpg",
+  "ext": "assets/gallery/r2slite-so101-drawer-side-2-a1/ext.mp4",
+  "wrist": "assets/gallery/r2slite-so101-drawer-side-2-a1/wrist.mp4",
+  "where": "SO-101, our recording"
  },
  {
   "key": "r2slite-swarm-09-marker-pot-0419-r1-xtra",
