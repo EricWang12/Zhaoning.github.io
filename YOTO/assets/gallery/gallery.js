@@ -526,21 +526,6 @@ window.GALLERY = [
   "where": "DROID, recorded at PennPAL"
  },
  {
-  "key": "r2slite-droidrr-08-open-microwave-door",
-  "run": "2026-10-26/r2slite-droidrr-08-open-microwave-door",
-  "title": "Open the microwave door",
-  "dataset": "DROID",
-  "level": "none",
-  "accepted": false,
-  "spotlighted": false,
-  "tile": "assets/gallery/r2slite-droidrr-08-open-microwave-door/tile.mp4",
-  "tile_speed": 2,
-  "poster": "assets/gallery/r2slite-droidrr-08-open-microwave-door/poster.jpg",
-  "ext": "assets/gallery/r2slite-droidrr-08-open-microwave-door/ext.mp4",
-  "wrist": "assets/gallery/r2slite-droidrr-08-open-microwave-door/wrist.mp4",
-  "where": "DROID, recorded at ILIAD"
- },
- {
   "key": "r2slite-droidrr-29-nest-bowls-stack-on-oven",
   "run": "2026-10-26/r2slite-droidrr-29-nest-bowls-stack-on-oven",
   "title": "Stack bowls and cup onto the oven",
